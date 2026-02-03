@@ -6,8 +6,9 @@ import Link from "next/link";
 
 const HeroSection = () => {
   return (
-    <section className="lg:py-16">
-      <div className="grid grid-cols-1 sm:grid-cols-12">
+    <section className="banner">
+      <div className="container mx-auto px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-12">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -76,6 +77,7 @@ const HeroSection = () => {
             />
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );

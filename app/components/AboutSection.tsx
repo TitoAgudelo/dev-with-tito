@@ -51,9 +51,9 @@ const AboutSection = () => {
   };
 
   return (
-    <section className="text-white" id="about">
+    <section className="text-white skill" id="about">
       <div className="md:grid md:grid-cols-2 gap-8 items-center py-8 px-4 xl:gap-16 sm:py-16 xl:px-16">
-        <Image src="/images/about-image.png" width={500} height={500} alt={""} />
+        <Image src="/images/about-image-desk.png" width={500} height={500} alt={""} />
         <div className="mt-4 md:mt-0 text-left flex flex-col h-full">
           <h2 className="text-4xl font-bold text-white mb-4">About Me</h2>
           <p className="text-base lg:text-lg">
@@ -61,10 +61,12 @@ const AboutSection = () => {
             web, mobile, and serverless environments. Specialized in AI-augmented software delivery,
             integrating OpenAI, Anthropic Claude, AWS Bedrock, and n8n automation pipelines with Next.js,
             Node.js, and GraphQL architectures.<br />
+            <br />
             Expert at designing developer workflows powered by OpenAPI Codegen, React Query, and custom
             CI/CD systems on Azure and AWS. Recognized for leading cross-functional teams that deliver fast,
             stable, and maintainable products — from enterprise insurance platforms to AI-powered booking
             systems.<br />
+            <br />
             Passionate about bridging traditional engineering with agentic AI systems, memory persistence,
             and generative workflows that scale human productivity.
           </p>
@@ -96,6 +98,13 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
+      <img
+        className="background-image-left"
+        src="/images/portfolio/color-sharp.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+      />
     </section>
   );
 };
