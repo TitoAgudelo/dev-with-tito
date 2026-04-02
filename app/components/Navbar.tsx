@@ -1,79 +1,142 @@
 "use client";
+
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import NavLink from "./NavLink";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
-import MenuOverlay from "./MenuOverlay";
 import Image from "next/image";
+import { useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  {
-    title: "About",
-    path: "#about",
-  },
-  {
-    title: "Projects",
-    path: "#projects",
-  },
-  {
-    title: "Contact",
-    path: "#contact",
-  },
+  { title: "About", path: "#about" },
+  { title: "Skills", path: "#skills" },
+  { title: "Projects", path: "#projects" },
+  { title: "Contact", path: "#contact" },
 ];
 
-const Navbar = () => {
-  const [navbarOpen, setNavbarOpen] = useState(false);
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 20);
+      const sections = navLinks.map((l) => l.path.replace("#", ""));
+      for (const id of [...sections].reverse()) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          setActiveSection(id);
+          break;
+        }
+      }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
   return (
-    <nav
-      className={`fixed mx-auto top-0 left-0 right-0 z-10 transition-colors duration-300 ${
-        scrolled ? "bg-[#121212] border-b border-[#33353F]" : "bg-transparent"
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" as const }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "glass-strong shadow-lg shadow-black/20" : "bg-transparent"
       }`}
     >
-      <div className="flex container lg:py-4 flex-wrap items-center justify-between mx-auto px-4 py-2">
-        <Link href={"/"}>
-          <Image src="/images/DevWithTito_logo.svg" alt="DevWithTito Logo" width={200} height={100} />
+      <div className="container-main flex items-center justify-between h-16 lg:h-20">
+        <Link href="/" className="relative z-10 shrink-0">
+          <Image
+            src="/images/DevWithTito_logo.svg"
+            alt="Dev With Tito"
+            width={160}
+            height={40}
+            priority
+          />
         </Link>
-        <div className="mobile-menu block md:hidden">
-          {!navbarOpen ? (
-            <button
-              onClick={() => setNavbarOpen(true)}
-              className="flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white"
-            >
-              <Bars3Icon className="h-5 w-5" />
-            </button>
-          ) : (
-            <button
-              onClick={() => setNavbarOpen(false)}
-              className="flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white"
-            >
-              <XMarkIcon className="h-5 w-5" />
-            </button>
-          )}
-        </div>
-        <div className="menu hidden md:block md:w-auto" id="navbar">
-          <ul className="flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0">
-            {navLinks.map((link, index) => (
-              <li key={index}>
-                <NavLink href={link.path} title={link.title} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      {navbarOpen ? <MenuOverlay links={navLinks} /> : null}
-    </nav>
-  );
-};
 
-export default Navbar;
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.path.replace("#", "");
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300 ${
+                  isActive ? "text-white" : "text-secondary hover:text-white"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 rounded-full bg-white/[0.08] border border-white/[0.06]"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10">{link.title}</span>
+              </Link>
+            );
+          })}
+          <Link href="#contact" className="btn-glow ml-4 !py-2 !px-5 !text-sm">
+            Let&apos;s Talk
+          </Link>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          onClick={() => setMobileOpen((p) => !p)}
+          className="relative z-10 md:hidden flex flex-col items-center justify-center w-10 h-10 gap-1.5"
+          aria-label="Toggle menu"
+        >
+          <motion.span
+            animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+            className="block w-6 h-0.5 bg-white rounded-full origin-center"
+          />
+          <motion.span
+            animate={mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+            className="block w-6 h-0.5 bg-white rounded-full"
+          />
+          <motion.span
+            animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+            className="block w-6 h-0.5 bg-white rounded-full origin-center"
+          />
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="glass-strong md:hidden overflow-hidden"
+          >
+            <div className="flex flex-col items-center gap-2 py-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  onClick={closeMobile}
+                  className="px-6 py-3 text-lg font-medium text-secondary hover:text-white transition-colors"
+                >
+                  {link.title}
+                </Link>
+              ))}
+              <Link
+                href="#contact"
+                onClick={closeMobile}
+                className="btn-glow mt-4 !text-sm"
+              >
+                Let&apos;s Talk
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
+  );
+}
