@@ -2,17 +2,32 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const navLinks = [
-  { title: "About", path: "#about" },
-  { title: "Skills", path: "#skills" },
-  { title: "Projects", path: "#projects" },
-  { title: "Contact", path: "#contact" },
+type NavLink = {
+  title: string;
+  path: string;
+  type: "section" | "route";
+};
+
+const navLinks: ReadonlyArray<NavLink> = [
+  { title: "About", path: "#about", type: "section" },
+  { title: "Skills", path: "#skills", type: "section" },
+  { title: "Projects", path: "#projects", type: "section" },
+  { title: "RAG Demo", path: "/rag", type: "route" },
+  { title: "Contact", path: "#contact", type: "section" },
 ];
 
+const sectionHref = (hash: string, isHome: boolean): string =>
+  isHome ? hash : `/${hash}`;
+
+const contactHref = (isHome: boolean): string => (isHome ? "#contact" : "/#contact");
+
 export default function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
@@ -20,7 +35,13 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      const sections = navLinks.map((l) => l.path.replace("#", ""));
+      if (!isHome) {
+        setActiveSection("");
+        return;
+      }
+      const sections = navLinks
+        .filter((l) => l.type === "section")
+        .map((l) => l.path.replace("#", ""));
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 120) {
@@ -32,7 +53,7 @@ export default function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -59,11 +80,16 @@ export default function Navbar() {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            const isActive = activeSection === link.path.replace("#", "");
+            const isActive =
+              link.type === "route"
+                ? pathname === link.path
+                : isHome && activeSection === link.path.replace("#", "");
+            const href =
+              link.type === "route" ? link.path : sectionHref(link.path, isHome);
             return (
               <Link
                 key={link.path}
-                href={link.path}
+                href={href}
                 className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300 ${
                   isActive ? "text-white" : "text-secondary hover:text-white"
                 }`}
@@ -79,7 +105,10 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <Link href="#contact" className="btn-glow ml-4 !py-2 !px-5 !text-sm">
+          <Link
+            href={contactHref(isHome)}
+            className="btn-glow ml-4 !py-2 !px-5 !text-sm"
+          >
             Let&apos;s Talk
           </Link>
         </div>
@@ -116,18 +145,24 @@ export default function Navbar() {
             className="glass-strong md:hidden overflow-hidden"
           >
             <div className="flex flex-col items-center gap-2 py-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  onClick={closeMobile}
-                  className="px-6 py-3 text-lg font-medium text-secondary hover:text-white transition-colors"
-                >
-                  {link.title}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const href =
+                  link.type === "route"
+                    ? link.path
+                    : sectionHref(link.path, isHome);
+                return (
+                  <Link
+                    key={link.path}
+                    href={href}
+                    onClick={closeMobile}
+                    className="px-6 py-3 text-lg font-medium text-secondary hover:text-white transition-colors"
+                  >
+                    {link.title}
+                  </Link>
+                );
+              })}
               <Link
-                href="#contact"
+                href={contactHref(isHome)}
                 onClick={closeMobile}
                 className="btn-glow mt-4 !text-sm"
               >
