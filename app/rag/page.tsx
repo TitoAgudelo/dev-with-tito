@@ -1,30 +1,22 @@
 import type { Metadata } from "next";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { createPageMetadata } from "../../lib/metadata";
+import ContactCTA from "../components/content/ContactCTA";
 import RAGHero from "./_components/RAGHero";
 import RAGAbout from "./_components/RAGAbout";
 import RAGFocus from "./_components/RAGFocus";
 import RAGExplainer from "./_components/RAGExplainer";
 import RAGDemo from "./_components/RAGDemo";
 
-export const metadata: Metadata = {
-  title: "RAG Demo · Tito Agudelo",
+export const metadata: Metadata = createPageMetadata({
+  title: "TypeScript Retrieval and RAG Lab",
   description:
-    "An end-to-end Retrieval-Augmented Generation demo built in TypeScript — typed pipeline, deterministic retrieval, observable generation. No external APIs.",
-  openGraph: {
-    title: "RAG Demo · Tito Agudelo",
-    description:
-      "End-to-end RAG pipeline in TypeScript. Senior engineer's take on grounded LLM patterns.",
-    url: "https://devwithtito.com/rag",
-    siteName: "Dev With Tito",
-    type: "website",
-  },
-};
+    "A transparent TypeScript demo of deterministic lexical retrieval, ranked sources, and extractive synthesis. No external model or API.",
+  path: "/rag",
+});
 
 export default function RAGPage() {
   return (
-    <main className="relative">
-      <Navbar />
+    <>
       <div className="container-main relative">
         <div className="mx-auto max-w-3xl">
           <RAGHero />
@@ -34,7 +26,10 @@ export default function RAGPage() {
           <RAGDemo />
         </div>
       </div>
-      <Footer />
-    </main>
+      <ContactCTA
+        title="Evaluating applied AI or retrieval architecture?"
+        description="Explore the broader AI-assisted engineering approach, or start a conversation about the constraints in your own system."
+      />
+    </>
   );
 }
