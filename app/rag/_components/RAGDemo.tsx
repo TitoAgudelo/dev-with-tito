@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useRef } from "react";
 import {
   Sparkles,
   ArrowRight,
@@ -25,9 +23,6 @@ const MAX_LENGTH = 500;
 export default function RAGDemo() {
   const [query, setQuery] = useState<string>("");
   const { ask, data, loading, error, reset } = useRAG();
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (loading) return;
@@ -48,13 +43,8 @@ export default function RAGDemo() {
   const submitDisabled = loading || query.trim().length === 0;
 
   return (
-    <section ref={ref} id="demo" className="py-16 lg:py-24">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-        transition={{ duration: 0.6 }}
-        className="flex flex-col items-center text-center"
-      >
+    <section id="demo" className="py-16 lg:py-24">
+      <div className="flex flex-col items-center text-center">
         <span className="section-label mb-4">
           <Sparkles className="w-3.5 h-3.5 text-accent" aria-hidden="true" />
           Try it
@@ -66,16 +56,11 @@ export default function RAGDemo() {
           The pipeline retrieves the most relevant documents and synthesizes a
           grounded answer. No external model — pure TypeScript, end to end.
         </p>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="mt-10 gradient-border rounded-2xl"
-      >
+      <div className="mt-10 gradient-border rounded-2xl">
         <div className="p-6 lg:p-8">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4" aria-busy={loading}>
             <label
               htmlFor="rag-query"
               className="text-xs font-mono uppercase tracking-wider text-muted"
@@ -113,7 +98,7 @@ export default function RAGDemo() {
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-                    Thinking…
+                    Searching sources…
                   </>
                 ) : (
                   <>
@@ -132,18 +117,14 @@ export default function RAGDemo() {
                 </button>
               )}
             </div>
+            {loading ? <p className="visually-hidden" role="status">Searching the knowledge base.</p> : null}
           </form>
         </div>
-      </motion.div>
+      </div>
 
       {/* Empty state — example queries */}
       {!data && !error && !loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-6"
-        >
+        <div className="mt-6">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-muted mb-3">
             <Lightbulb className="w-3.5 h-3.5" aria-hidden="true" />
             Try one of these
@@ -154,64 +135,47 @@ export default function RAGDemo() {
                 key={example}
                 type="button"
                 onClick={() => handleExample(example)}
-                className="text-left text-sm text-secondary hover:text-primary hover:border-accent/40 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] transition-colors duration-200"
+                className="min-h-11 text-left text-sm text-secondary hover:text-primary hover:border-accent/40 px-3 py-2 rounded-lg border border-border bg-surface transition-colors duration-200"
               >
                 {example}
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Error state */}
-      <AnimatePresence>
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="mt-6 flex items-start gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04]"
-            role="alert"
-          >
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" aria-hidden="true" />
-            <div>
-              <p className="text-sm font-medium text-primary">Something went off the rails</p>
-              <p className="text-sm text-secondary mt-1">{error}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {error && (
+        <div className="rag-error mt-6 flex items-start gap-3 p-4 rounded-xl" role="alert">
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p className="text-sm font-medium text-primary">Something went off the rails</p>
+            <p className="text-sm text-secondary mt-1">{error}</p>
+          </div>
+        </div>
+      )}
 
       {/* Result */}
-      <AnimatePresence>
-        {data && (
-          <motion.div
-            key={data.query}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mt-8 flex flex-col gap-6"
-          >
-            <Answer answer={data.answer} />
-            <Sources sources={data.sources} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {data && (
+        <div className="mt-8 flex flex-col gap-6">
+          <Answer answer={data.answer} />
+          <Sources sources={data.sources} />
+        </div>
+      )}
     </section>
   );
 }
 
 function Answer({ answer }: { answer: string }) {
   return (
-    <div className="glass rounded-2xl p-6 lg:p-8">
+    <div className="glass rounded-2xl p-6 lg:p-8" role="status" aria-live="polite">
       <div className="flex items-center gap-2 mb-4">
         <span className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
           <Sparkles className="w-4 h-4 text-accent" aria-hidden="true" />
         </span>
-        <span className="text-xs font-mono uppercase tracking-wider text-muted">
+        <h3 className="text-xs font-mono uppercase tracking-wider text-muted">
           Answer
-        </span>
+        </h3>
       </div>
       <p className="text-primary text-base sm:text-lg leading-relaxed">
         {answer}
@@ -235,7 +199,7 @@ function Sources({ sources }: { sources: readonly RAGSource[] }) {
         {sources.map((source) => (
           <li
             key={source.id}
-            className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-colors duration-200"
+            className="rounded-xl border border-border bg-surface p-4 hover:bg-elevated transition-colors duration-200"
           >
             <div className="flex items-start justify-between gap-3 mb-1.5">
               <div className="flex items-center gap-2 min-w-0">
@@ -248,9 +212,8 @@ function Sources({ sources }: { sources: readonly RAGSource[] }) {
               </div>
               <span
                 className="text-[11px] font-mono text-accent shrink-0"
-                title="Relevance score"
               >
-                {source.score.toFixed(2)}
+                Relevance {source.score.toFixed(2)}
               </span>
             </div>
             <p className="text-sm text-secondary leading-relaxed">

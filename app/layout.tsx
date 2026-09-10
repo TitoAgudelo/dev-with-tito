@@ -1,23 +1,22 @@
-import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import MainContent from "./components/shell/MainContent";
+import SiteFooter from "./components/shell/SiteFooter";
+import SiteHeader from "./components/shell/SiteHeader";
+import SkipLink from "./components/shell/SkipLink";
+import { getYearsExperience } from "../content/profile";
+import { siteConfig } from "../content/site";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+const yearsExperience = getYearsExperience();
 
 export const metadata: Metadata = {
-  title: "Tito Agudelo — Lead Software Engineer & AI-Driven Builder",
+  metadataBase: new URL(siteConfig.canonicalOrigin),
+  title: {
+    default: "Tito Agudelo — Staff Software Engineer & AI Architect",
+    template: "%s · Tito Agudelo",
+  },
   description:
-    "Engineer with 12+ years building scalable full-stack and cloud solutions. Specialized in AI-augmented delivery with Next.js, Node.js, and GraphQL.",
+    `Staff software engineer and AI architect with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
   keywords: [
     "Tito Agudelo",
     "Software Engineer",
@@ -31,24 +30,31 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Tito Agudelo" }],
   openGraph: {
-    title: "Tito Agudelo — Lead Software Engineer & AI-Driven Builder",
+    title: "Tito Agudelo — Staff Software Engineer & AI Architect",
     description:
-      "Engineer with 12+ years building scalable full-stack and cloud solutions across web, mobile, and serverless.",
-    url: "https://devwithtito.com",
+      `Staff software engineer and AI architect with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
+    url: siteConfig.canonicalOrigin,
     siteName: "Dev With Tito",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tito Agudelo — Lead Software Engineer",
+    title: "Tito Agudelo — Staff Software Engineer & AI Architect",
     description:
-      "12+ years building scalable full-stack and cloud solutions. AI-augmented delivery specialist.",
+      `${yearsExperience} years building product systems across web, mobile, platform, and applied AI delivery.`,
   },
   robots: {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#F6F5F2",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -57,9 +63,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
-        {children}
+    <html lang="en" data-theme="light">
+      <body className="font-sans antialiased">
+        <SkipLink />
+        <SiteHeader />
+        <MainContent>{children}</MainContent>
+        <SiteFooter />
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import type { RAGDocument, RAGSource } from "../../types/rag";
+import { getYearsExperience } from "../../content/profile";
 
 /**
  * In-memory knowledge base. Small on purpose: this is a portfolio demo
@@ -9,8 +10,8 @@ const KNOWLEDGE_BASE: readonly RAGDocument[] = [
     id: "experience",
     title: "Experience overview",
     content:
-      "Tito Agudelo is a Senior Software Engineer with 13+ years of professional experience building web and mobile applications. He has delivered projects for both early-stage startups and large enterprises, leading work across frontend, backend, and infrastructure.",
-    tags: ["experience", "career", "senior", "engineer"],
+      `Tito Agudelo is a Staff Software Engineer and AI Architect with ${getYearsExperience()} years of professional experience building web, mobile, and platform products. He has delivered projects for early-stage startups and large enterprises across frontend, backend, and infrastructure.`,
+    tags: ["experience", "career", "staff", "architect", "engineer"],
   },
   {
     id: "remote-work",
@@ -37,14 +38,14 @@ const KNOWLEDGE_BASE: readonly RAGDocument[] = [
     id: "rag",
     title: "RAG and AI systems",
     content:
-      "Recently Tito has focused on integrating AI into real production systems. That includes Retrieval-Augmented Generation (RAG) pipelines that ground LLM answers in trusted documents, embedding stores, and prompt orchestration. He treats RAG as a data problem first: clean ingestion, deterministic retrieval, and observable generation.",
+      "Tito approaches AI systems as product and reliability problems first: bounded context, inspectable retrieval, observable generation, explicit fallback behavior, and human ownership. This portfolio's RAG Lab is deliberately deterministic and does not claim to use an LLM, embeddings, or a vector database.",
     tags: ["rag", "ai", "llm", "retrieval", "embeddings"],
   },
   {
     id: "automation",
     title: "AI automation and workflows",
     content:
-      "Beyond RAG, Tito builds automation workflows that combine LLMs with deterministic code: data extraction, classification, internal copilots, and agentic flows that take action against APIs. He focuses on reliability — fallbacks, structured outputs, and tests around the parts of the pipeline that are not deterministic.",
+      "Tito's AI-assisted engineering approach combines probabilistic tools with deterministic checks. Agent, voice, and workflow concepts on this site are explicitly marked as future demo architecture until working prototypes and evidence are available.",
     tags: ["automation", "agents", "llm", "workflow", "reliability"],
   },
   {
