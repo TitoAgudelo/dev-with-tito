@@ -32,5 +32,5 @@ test("AI demo readiness labels distinguish live work from future architecture", 
   const playground = await readFile(new URL("../app/components/experience/AIPlayground.tsx", import.meta.url), "utf8");
   assert.match(playground, /status: "Live"/);
   assert.match(playground, /status: "Architecture ready"/);
-  assert.match(playground, /href: "\/rag"/);
+  assert.match(playground, /href: "\/ask"/);
 });

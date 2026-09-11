@@ -30,7 +30,7 @@ export const siteConfig = {
     { id: "work", label: "Work", href: "/work", match: "prefix", priority: "primary", status: "published" },
     { id: "expertise", label: "Expertise", href: "/expertise", match: "exact", priority: "primary", status: "published" },
     { id: "about", label: "About", href: "/about", match: "exact", priority: "primary", status: "published" },
-    { id: "rag", label: "RAG Lab", href: "/rag", match: "exact", priority: "primary", status: "published" },
+    { id: "ask", label: "Ask Tito", href: "/ask", match: "exact", priority: "primary", status: "published" },
     { id: "contact", label: "Contact", href: "/#contact", match: "exact", priority: "primary", status: "published" },
     { id: "privacy", label: "Privacy", href: "/privacy", match: "exact", priority: "secondary", status: "planned" },
   ] satisfies readonly NavigationItem[],
