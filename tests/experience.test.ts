@@ -62,3 +62,15 @@ test("AI demo readiness labels distinguish live work from future architecture", 
   assert.match(playground, /status: "Architecture ready"/);
   assert.match(playground, /href: "\/ask"/);
 });
+
+test("terminal CTA embeds the contact form without hijacking keyboard submission", async () => {
+  const terminal = await readFile(
+    new URL("../app/components/experience/TerminalCTA.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(terminal, /<ContactForm appearance="terminal" idPrefix="home-contact"/);
+  assert.match(terminal, />Connect on LinkedIn/);
+  assert.doesNotMatch(terminal, /window\.open|openLinkedIn|Press Enter|hire-tito/);
+  assert.doesNotMatch(terminal, /onKeyDown|onSubmit/);
+});
