@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
 type FormState =
   | { readonly status: "idle" }
@@ -10,9 +10,24 @@ type FormState =
 
 const initialState: FormState = { status: "idle" };
 
-export default function ContactForm() {
+interface ContactFormProps {
+  readonly appearance?: "default" | "terminal";
+  readonly idPrefix?: string;
+}
+
+export default function ContactForm({
+  appearance = "default",
+  idPrefix,
+}: ContactFormProps = {}) {
   const [state, setState] = useState<FormState>(initialState);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const submissionPendingRef = useRef(false);
+  const generatedId = useId().replaceAll(":", "");
+  const fieldIdPrefix = idPrefix ?? `contact-${generatedId}`;
+  const emailId = `${fieldIdPrefix}-email`;
+  const subjectId = `${fieldIdPrefix}-subject`;
+  const messageId = `${fieldIdPrefix}-message`;
+  const terminalAppearance = appearance === "terminal";
 
   useEffect(() => {
     if (state.status === "success") successHeadingRef.current?.focus();
@@ -20,6 +35,9 @@ export default function ContactForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submissionPendingRef.current) return;
+
+    submissionPendingRef.current = true;
     setState({ status: "submitting" });
 
     const form = event.currentTarget;
@@ -36,7 +54,20 @@ export default function ContactForm() {
         }),
       });
 
-      if (!response.ok) throw new Error("Request failed");
+      const result: unknown = await response.json().catch(() => null);
+      if (
+        !response.ok ||
+        !result ||
+        typeof result !== "object" ||
+        !("success" in result) ||
+        result.success !== true
+      ) {
+        const message = result && typeof result === "object" && "error" in result && typeof result.error === "string"
+          ? result.error
+          : "Your message could not be sent. Your entries are preserved; try again or use direct email.";
+        setState({ status: "error", message });
+        return;
+      }
 
       form.reset();
       setState({ status: "success", message: "Your message was sent successfully." });
@@ -45,12 +76,17 @@ export default function ContactForm() {
         status: "error",
         message: "Your message could not be sent. Your entries are preserved; try again or use direct email.",
       });
+    } finally {
+      submissionPendingRef.current = false;
     }
   };
 
   if (state.status === "success") {
     return (
-      <div className="flex flex-col items-start py-8" role="status">
+      <div
+        className={`contact-form__success flex flex-col items-start py-8${terminalAppearance ? " contact-form__success--terminal" : ""}`}
+        role="status"
+      >
         <h3 ref={successHeadingRef} tabIndex={-1} className="type-h3">
           Message sent
         </h3>
@@ -65,13 +101,17 @@ export default function ContactForm() {
   const submitting = state.status === "submitting";
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5" aria-busy={submitting}>
+    <form
+      onSubmit={handleSubmit}
+      className={`contact-form flex flex-col gap-5${terminalAppearance ? " contact-form--terminal" : ""}`}
+      aria-busy={submitting}
+    >
       <div className="flex flex-col gap-2">
-        <label htmlFor="contact-email" className="text-sm font-medium text-secondary">Email</label>
+        <label htmlFor={emailId} className="contact-form__label text-sm font-medium text-secondary">Email</label>
         <input
           type="email"
           name="email"
-          id="contact-email"
+          id={emailId}
           required
           autoComplete="email"
           maxLength={254}
@@ -80,11 +120,11 @@ export default function ContactForm() {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="contact-subject" className="text-sm font-medium text-secondary">Subject</label>
+        <label htmlFor={subjectId} className="contact-form__label text-sm font-medium text-secondary">Subject</label>
         <input
           type="text"
           name="subject"
-          id="contact-subject"
+          id={subjectId}
           required
           maxLength={120}
           placeholder="What would you like to discuss?"
@@ -92,10 +132,10 @@ export default function ContactForm() {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="contact-message" className="text-sm font-medium text-secondary">Message</label>
+        <label htmlFor={messageId} className="contact-form__label text-sm font-medium text-secondary">Message</label>
         <textarea
           name="message"
-          id="contact-message"
+          id={messageId}
           required
           maxLength={2000}
           rows={6}
@@ -105,12 +145,12 @@ export default function ContactForm() {
       </div>
 
       {state.status === "error" ? (
-        <p className="text-sm text-[var(--color-danger)]" role="alert">{state.message}</p>
+        <p className="contact-form__error text-sm text-[var(--color-danger)]" role="alert">{state.message}</p>
       ) : null}
 
-      <p className="type-small">Form content is sent through the site&apos;s email delivery service so Tito can respond. Prefer not to use it? Choose direct email.</p>
+      <p className="contact-form__help type-small">Form content is sent through the site&apos;s email delivery service so Tito can respond. Prefer not to use it? Choose direct email.</p>
 
-      <button type="submit" disabled={submitting} className="btn-glow w-full">
+      <button type="submit" disabled={submitting} className="contact-form__submit btn-glow w-full">
         {submitting ? "Sending message…" : "Send message"}
       </button>
     </form>

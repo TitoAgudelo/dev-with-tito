@@ -1004,15 +1004,27 @@ select {
 .terminal__bar { display: flex; min-height: 3rem; padding-inline: 1rem; align-items: center; gap: 0.45rem; border-bottom: 1px solid rgb(255 255 255 / 10%); color: #777570; font-size: 0.625rem; }
 .terminal__bar i { display: block; width: 0.55rem; aspect-ratio: 1; border-radius: 50%; background: #4b4a47; }
 .terminal__bar span { margin-left: auto; }
-.terminal__line { display: flex; padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 0; gap: 0.75rem; color: #f6f5f2; font-size: clamp(1.15rem, 3vw, 1.75rem); }
-.terminal__line > span:first-child { color: #a78bfa; }
-.terminal__caret { width: 0.65em; height: 1.15em; background: #10b981; animation: terminal-caret 1s steps(1) infinite; }
-.terminal__response { padding: 1rem clamp(1.25rem, 5vw, 3rem) 0; color: #8d8b86; font-size: 0.75rem; }
-.terminal button { display: flex; min-height: 3rem; margin: 2rem clamp(1.25rem, 5vw, 3rem) clamp(1.25rem, 5vw, 3rem); padding: 0.75rem 1rem; align-items: center; gap: 0.75rem; border: 1px solid rgb(255 255 255 / 15%); border-radius: var(--radius-sm); background: transparent; color: #f6f5f2; cursor: pointer; font-family: inherit; font-size: 0.75rem; will-change: transform; }
-.terminal button:hover { border-color: #a78bfa; }
-.terminal noscript a { color: white; }
-
-@keyframes terminal-caret { 50% { opacity: 0; } }
+.terminal__intro { display: grid; padding: clamp(1.5rem, 4vw, 2.25rem) clamp(1.25rem, 5vw, 3rem); gap: 0.75rem; border-bottom: 1px solid rgb(255 255 255 / 10%); }
+.terminal__intro p { margin: 0; }
+.terminal__intro p:first-child { color: #f6f5f2; font-size: clamp(1rem, 2vw, 1.25rem); }
+.terminal__intro p:first-child span { margin-right: 0.65rem; color: #a78bfa; }
+.terminal__intro p:last-child { color: #aaa8a3; font-size: 0.75rem; line-height: 1.6; }
+.contact-form--terminal { padding: clamp(1.5rem, 5vw, 3rem); font-family: var(--font-family-body); }
+.contact-form--terminal .contact-form__label { color: #e7e5e0; }
+.contact-form--terminal .input-field { border-color: rgb(255 255 255 / 24%); background: #101010; color: #f6f5f2; }
+.contact-form--terminal .input-field::placeholder { color: #92908b; opacity: 1; }
+.contact-form--terminal .input-field:focus-visible { border-color: #a78bfa; box-shadow: 0 0 0 3px rgb(167 139 250 / 32%); }
+.contact-form--terminal .contact-form__error { color: #fda4af; }
+.contact-form--terminal .contact-form__help { color: #aaa8a3; }
+.contact-form--terminal .contact-form__submit { display: flex; min-height: 3rem; margin: 0; align-items: center; justify-content: center; border: 1px solid #8b5cf6; background: #7c3aed; color: #ffffff; font-family: var(--font-family-body); font-size: 0.8125rem; font-weight: 650; }
+.contact-form--terminal .contact-form__submit:hover:not(:disabled) { border-color: #c4b5fd; background: #6d28d9; }
+.contact-form--terminal .contact-form__submit:focus-visible { outline: 3px solid #c4b5fd; outline-offset: 3px; }
+.contact-form__success--terminal { padding: clamp(2rem, 5vw, 3rem); color: #f6f5f2; }
+.contact-form__success--terminal p { color: #c4c2bd; }
+.contact-form__success--terminal .btn-outline { border-color: rgb(255 255 255 / 34%); color: #f6f5f2; }
+.terminal__secondary { display: flex; padding: 1rem clamp(1.25rem, 5vw, 3rem) 1.5rem; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.25rem; border-top: 1px solid rgb(255 255 255 / 10%); color: #92908b; font-size: 0.6875rem; }
+.terminal__secondary a { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.45rem; color: #c4b5fd; font-weight: 600; text-decoration-thickness: 1px; }
+.terminal__secondary a:hover { color: #ddd6fe; }
 
 .site-logo { gap: 0.65rem; color: var(--color-text-primary); text-decoration: none; }
 .site-logo__mark { display: grid; width: 2rem; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--color-text-primary); color: var(--color-canvas); font-family: var(--font-family-mono); font-size: 0.55rem; letter-spacing: -0.06em; }
@@ -1050,7 +1062,6 @@ select {
   .hero-background__canvas { display: none; }
   .orbit-nodes li { animation: none; transform: rotate(var(--node-angle)) translateX(min(38vw, 20rem)) rotate(calc(var(--node-angle) * -1)); }
   .case-story { min-height: auto; }
-  .terminal__caret { animation: none; }
 }
 
 /* Ask Tito AI -------------------------------------------------------------- */
