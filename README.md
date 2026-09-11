@@ -1,24 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is the active [Next.js](https://nextjs.org) application for Dev With Tito.
+
+## Toolchain
+
+- Node.js `24.15.0` (see `.nvmrc`)
+- npm `11.6.2` (the only supported package manager)
+- `package-lock.json` is the authoritative dependency lockfile
+
+With nvm installed:
+
+```bash
+nvm install
+nvm use
+npm install --global npm@11.6.2
+npm ci
+```
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Quality checks
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+`npm run check` runs all four gates in sequence. `npm run audit:prod` fails on high or critical production dependency vulnerabilities. GitHub Actions runs the same gates for pushes and pull requests.
+
+## Legacy package
+
+`personal-portfolio/` is an archived 2022 Create React App reference. It is not imported, deployed, or included in the active application's lint, typecheck, test, build, or security gates. See its README and `STABILIZATION_PLAN.md` for the disposition rationale.
 
 ## Learn More
 

@@ -57,7 +57,7 @@ test("experience length is derived from the authoritative career start", () => {
 
 test("sitemap contains canonical content routes and excludes the contact fragment", () => {
   const urls = sitemap().map(({ url }) => url);
-  for (const path of ["", "/work", "/expertise", "/about", "/rag"]) {
+  for (const path of ["", "/work", "/expertise", "/about", "/ask", "/rag"]) {
     assert.ok(urls.includes(`https://devwithtito.com${path}`));
   }
   for (const project of publishedProjects) {
@@ -73,6 +73,7 @@ test("all Phase 2 route entry points exist", async () => {
     "../app/work/[slug]/page.tsx",
     "../app/expertise/page.tsx",
     "../app/about/page.tsx",
+    "../app/ask/page.tsx",
     "../app/contact/page.tsx",
   ]) {
     const source = await readFile(new URL(path, import.meta.url), "utf8");

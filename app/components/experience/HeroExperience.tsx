@@ -1,9 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const roles = ["Staff Software Engineer", "Platform Architect", "AI Builder"] as const;
+
+const HeroBackground = dynamic(() => import("./HeroBackground"), {
+  ssr: false,
+  loading: () => (
+    <div className="hero-background hero-background--loading" aria-hidden="true">
+      <div className="hero-background__fallback" />
+      <div className="hero-background__veil" />
+    </div>
+  ),
+});
 
 export default function HeroExperience() {
   const [activeRole, setActiveRole] = useState(0);
@@ -20,7 +31,7 @@ export default function HeroExperience() {
 
   return (
     <section className="experience-hero" aria-labelledby="experience-title">
-      <div className="experience-grid" aria-hidden="true" />
+      <HeroBackground />
       <div className="experience-float experience-float--one" aria-hidden="true">01</div>
       <div className="experience-float experience-float--two" aria-hidden="true">AI / SYSTEMS</div>
       <div className="experience-container experience-hero__inner">

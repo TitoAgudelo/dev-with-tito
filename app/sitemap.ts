@@ -6,7 +6,7 @@ import { siteConfig } from "../content/site";
 const lastModified = new Date("2026-09-09T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["", "/work", "/expertise", "/about", "/rag"];
+  const paths = ["", "/work", "/expertise", "/about", "/ask", "/rag"];
   return [
     ...paths.map((path) => ({
       url: `${siteConfig.canonicalOrigin}${path}`,

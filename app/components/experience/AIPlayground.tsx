@@ -12,7 +12,7 @@ interface PlaygroundDemo {
 }
 
 const demos: readonly PlaygroundDemo[] = [
-  { id: "rag", title: "RAG", status: "Live", detail: "Deterministic retrieval with source-ranked context.", href: "/rag" },
+  { id: "rag", title: "Ask Tito", status: "Live", detail: "Career-grounded retrieval with source-attributed responses.", href: "/ask" },
   { id: "agents", title: "Agents", status: "Architecture ready", detail: "Bounded tools, observable handoffs, human approval." },
   { id: "voice", title: "Voice AI", status: "Architecture ready", detail: "Realtime turn-taking designed around interruption." },
   { id: "workflows", title: "Workflows", status: "Architecture ready", detail: "Typed, recoverable automation across systems." },

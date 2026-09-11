@@ -45,7 +45,7 @@ test("navigation follows the documented order and publishes only available route
       ["Work", "/work"],
       ["Expertise", "/expertise"],
       ["About", "/about"],
-      ["RAG Lab", "/rag"],
+      ["Ask Tito", "/ask"],
       ["Contact", "/#contact"],
       ["Privacy", "/privacy"],
     ],
@@ -53,7 +53,7 @@ test("navigation follows the documented order and publishes only available route
 
   assert.deepEqual(
     publishedNavigation.map(({ id }) => id),
-    ["work", "expertise", "about", "rag", "contact"],
+    ["work", "expertise", "about", "ask", "contact"],
   );
   assert.equal(new Set(siteConfig.navigation.map(({ id }) => id)).size, siteConfig.navigation.length);
 });
