@@ -28,6 +28,34 @@ test("scroll motion is ScrollTrigger-owned and preference-aware", async () => {
   assert.match(stylesheet, /Space Grotesk Variable/);
 });
 
+test("hero Cloud Field is isolated, progressive, and motion preference aware", async () => {
+  const hero = await readFile(new URL("../app/components/experience/HeroExperience.tsx", import.meta.url), "utf8");
+  const background = await readFile(new URL("../app/components/experience/HeroBackground.tsx", import.meta.url), "utf8");
+  const stylesheet = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(hero, /dynamic\(\(\) => import\("\.\/HeroBackground"\)/);
+  assert.match(hero, /ssr: false/);
+  assert.match(background, /prefers-reduced-motion: reduce/);
+  assert.match(background, /IntersectionObserver/);
+  assert.match(background, /visibilitychange/);
+  assert.match(background, /Math\.min\(window\.devicePixelRatio \|\| 1, mobile \? 1 : 1\.5\)/);
+  assert.match(background, /cancelAnimationFrame/);
+  assert.match(background, /deleteBuffer/);
+  assert.match(background, /deleteProgram/);
+  assert.match(background, /inverseSmoothstep/);
+  assert.match(background, /color \+= vec3\(0\.78, 0\.83, 1\.0\) \* starField/);
+  assert.doesNotMatch(background, /smoothstep\(ridge \+ 0\.003, ridge - 0\.001/);
+  assert.doesNotMatch(background, /smoothstep\(0\.00[3-9], 0\.0,/);
+  assert.doesNotMatch(background, /smoothstep\(0\.8, 0\.55,/);
+  assert.doesNotMatch(background, /color -= .*starField/);
+  assert.doesNotMatch(hero, /experience-grid/);
+  assert.doesNotMatch(stylesheet, /\.experience-grid\s*\{/);
+  assert.doesNotMatch(stylesheet, /\.experience-hero::after/);
+  assert.match(stylesheet, /\.hero-background__fallback/);
+  assert.match(stylesheet, /data-ready="true"\] \.hero-background__fallback \{ opacity: 0; \}/);
+  assert.match(stylesheet, /pointer-events: none/);
+});
+
 test("AI demo readiness labels distinguish live work from future architecture", async () => {
   const playground = await readFile(new URL("../app/components/experience/AIPlayground.tsx", import.meta.url), "utf8");
   assert.match(playground, /status: "Live"/);

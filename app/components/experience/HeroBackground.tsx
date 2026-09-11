@@ -44,6 +44,10 @@ float fbm(float value, float octaves) {
   return result;
 }
 
+float inverseSmoothstep(float lowerEdge, float upperEdge, float value) {
+  return 1.0 - smoothstep(lowerEdge, upperEdge, value);
+}
+
 float meteor(vec2 uv, float time) {
   float cycle = mod(time * 0.11, 1.0);
   float seed = floor(time * 0.11);
@@ -57,23 +61,24 @@ float meteor(vec2 uv, float time) {
   vec2 delta = uv - position;
   float along = dot(delta, direction);
   float perpendicular = length(delta - direction * along);
-  float trail = smoothstep(0.0, -0.12, along) * smoothstep(-0.18, -0.04, along);
-  float core = smoothstep(0.003, 0.0, perpendicular) * trail;
-  float glow = smoothstep(0.012, 0.0, perpendicular) * trail * 0.3;
-  float fade = smoothstep(0.0, 0.1, cycle) * smoothstep(0.8, 0.55, cycle);
+  float trail = inverseSmoothstep(-0.12, 0.0, along) * smoothstep(-0.18, -0.04, along);
+  float core = inverseSmoothstep(0.0, 0.003, perpendicular) * trail;
+  float glow = inverseSmoothstep(0.0, 0.012, perpendicular) * trail * 0.3;
+  float fade = smoothstep(0.0, 0.1, cycle) * inverseSmoothstep(0.55, 0.8, cycle);
   return (core + glow) * fade;
 }
 
-float stars(vec2 uv, float density) {
+float stars(vec2 uv, float density, float threshold, float scale, float speed) {
   vec2 cell = floor(uv * density);
   vec2 subdivision = fract(uv * density);
   float random = hash2(cell);
-  float brightness = step(0.978, random);
-  float size = 0.025 + random * 0.04;
+  float brightness = smoothstep(threshold, 1.0, random);
+  float size = (0.022 + random * 0.045) * scale;
   float distanceToStar = length(subdivision - vec2(hash2(cell + 100.0), hash2(cell + 200.0)));
-  float star = brightness * smoothstep(size, 0.0, distanceToStar);
-  star *= 0.58 + 0.42 * sin(u_time * (0.7 + random * 2.0) + random * 6.28);
-  return star;
+  float core = inverseSmoothstep(0.0, size, distanceToStar);
+  float halo = inverseSmoothstep(0.0, size * 3.4, distanceToStar) * 0.22;
+  float twinkle = 0.68 + 0.32 * sin(u_time * (speed + random * 1.8) + random * 6.2832);
+  return brightness * (core + halo) * twinkle;
 }
 
 void main() {
@@ -81,22 +86,23 @@ void main() {
   float aspect = u_resolution.x / u_resolution.y;
   vec2 pointer = u_pointer * 2.0 - 1.0;
 
-  vec3 skyTop = vec3(0.965, 0.961, 0.949);
-  vec3 skyMiddle = vec3(0.925, 0.910, 0.949);
-  vec3 skyBottom = vec3(0.871, 0.835, 0.933);
+  vec3 skyTop = vec3(0.018, 0.022, 0.070);
+  vec3 skyMiddle = vec3(0.065, 0.045, 0.145);
+  vec3 skyBottom = vec3(0.190, 0.095, 0.330);
   vec3 color = mix(skyBottom, skyMiddle, smoothstep(0.3, 0.62, uv.y));
   color = mix(color, skyTop, smoothstep(0.6, 1.0, uv.y));
 
   float horizon = 0.34;
   float horizonGlow = exp(-pow((uv.y - horizon) * 3.8, 2.0));
-  color += vec3(0.10, 0.04, 0.18) * horizonGlow * 0.13;
+  color += vec3(0.22, 0.10, 0.42) * horizonGlow * 0.48;
   float centerGlow = exp(-pow((uv.x - 0.58) * 1.45, 2.0)) * exp(-pow((uv.y - horizon) * 4.0, 2.0));
-  color += vec3(0.11, 0.06, 0.20) * centerGlow * 0.11;
+  color += vec3(0.28, 0.13, 0.52) * centerGlow * 0.34;
 
-  float starField = stars(uv * vec2(aspect, 1.0), 58.0);
+  vec2 starUv = uv * vec2(aspect, 1.0);
+  float starField = stars(starUv, 44.0, 0.955, 1.12, 0.65);
+  starField += stars(starUv + 500.0, 78.0, 0.972, 0.86, 1.15) * 0.72;
   if (u_quality > 0.75) {
-    starField += stars(uv * vec2(aspect, 1.0) + 500.0, 96.0) * 0.55;
-    starField += stars(uv * vec2(aspect, 1.0) + 900.0, 142.0) * 0.25;
+    starField += stars(starUv + 900.0, 128.0, 0.982, 0.64, 1.7) * 0.46;
   }
 
   float starMask = 1.0;
@@ -109,73 +115,73 @@ void main() {
   float ridgeGlow;
   vec3 layerColor;
 
-  layerColor = vec3(0.815, 0.775, 0.875);
+  layerColor = vec3(0.225, 0.145, 0.365);
   coordinate = uv.x * aspect * 1.6 + u_time * 0.006 + pointer.x * 0.010;
   verticalShift = pointer.y * 0.003;
   profile = fbm(coordinate, 5.0) * 0.10 + fbm(coordinate * 0.3 + 17.0, 3.0) * 0.07;
   ridge = 0.40 + profile + verticalShift;
-  mountain = smoothstep(ridge + 0.003, ridge - 0.001, uv.y);
+  mountain = inverseSmoothstep(ridge - 0.001, ridge + 0.003, uv.y);
   ridgeDistance = abs(uv.y - ridge);
-  ridgeGlow = smoothstep(0.014, 0.0, ridgeDistance) * 0.12;
-  color = mix(color, layerColor, mountain * 0.66);
-  color += vec3(0.25, 0.12, 0.44) * ridgeGlow;
-  starMask *= 1.0 - mountain;
+  ridgeGlow = inverseSmoothstep(0.0, 0.014, ridgeDistance) * 0.12;
+  color = mix(color, layerColor, mountain * 0.84);
+  color += vec3(0.42, 0.22, 0.66) * ridgeGlow;
+  starMask *= clamp(1.0 - mountain, 0.0, 1.0);
 
-  layerColor = vec3(0.850, 0.820, 0.900);
+  layerColor = vec3(0.175, 0.105, 0.310);
   coordinate = uv.x * aspect * 2.0 + u_time * 0.012 + pointer.x * 0.020;
   verticalShift = pointer.y * 0.006;
   profile = fbm(coordinate, 5.0) * 0.13 + fbm(coordinate * 0.3 + 34.0, 3.0) * 0.091;
   ridge = 0.33 + profile + verticalShift;
-  mountain = smoothstep(ridge + 0.003, ridge - 0.001, uv.y);
+  mountain = inverseSmoothstep(ridge - 0.001, ridge + 0.003, uv.y);
   ridgeDistance = abs(uv.y - ridge);
-  ridgeGlow = smoothstep(0.014, 0.0, ridgeDistance) * 0.10;
-  color = mix(color, layerColor, mountain * 0.70);
-  color += vec3(0.25, 0.12, 0.44) * ridgeGlow;
-  starMask *= 1.0 - mountain;
+  ridgeGlow = inverseSmoothstep(0.0, 0.014, ridgeDistance) * 0.10;
+  color = mix(color, layerColor, mountain * 0.88);
+  color += vec3(0.38, 0.18, 0.60) * ridgeGlow;
+  starMask *= clamp(1.0 - mountain, 0.0, 1.0);
 
-  layerColor = vec3(0.885, 0.855, 0.915);
+  layerColor = vec3(0.128, 0.072, 0.240);
   coordinate = uv.x * aspect * 2.6 + u_time * 0.020 + pointer.x * 0.034;
   verticalShift = pointer.y * 0.010;
   profile = fbm(coordinate, 5.0) * 0.16 + fbm(coordinate * 0.3 + 51.0, 3.0) * 0.112;
   ridge = 0.26 + profile + verticalShift;
-  mountain = smoothstep(ridge + 0.003, ridge - 0.001, uv.y);
+  mountain = inverseSmoothstep(ridge - 0.001, ridge + 0.003, uv.y);
   ridgeDistance = abs(uv.y - ridge);
-  ridgeGlow = smoothstep(0.014, 0.0, ridgeDistance) * 0.08;
-  color = mix(color, layerColor, mountain * 0.74);
-  color += vec3(0.25, 0.12, 0.44) * ridgeGlow;
-  starMask *= 1.0 - mountain;
+  ridgeGlow = inverseSmoothstep(0.0, 0.014, ridgeDistance) * 0.08;
+  color = mix(color, layerColor, mountain * 0.91);
+  color += vec3(0.34, 0.15, 0.54) * ridgeGlow;
+  starMask *= clamp(1.0 - mountain, 0.0, 1.0);
 
-  layerColor = vec3(0.915, 0.895, 0.930);
+  layerColor = vec3(0.085, 0.045, 0.165);
   coordinate = uv.x * aspect * 3.2 + u_time * 0.030 + pointer.x * 0.050;
   verticalShift = pointer.y * 0.015;
   profile = fbm(coordinate, 5.0) * 0.14 + fbm(coordinate * 0.3 + 68.0, 3.0) * 0.098;
   ridge = 0.18 + profile + verticalShift;
-  mountain = smoothstep(ridge + 0.003, ridge - 0.001, uv.y);
+  mountain = inverseSmoothstep(ridge - 0.001, ridge + 0.003, uv.y);
   ridgeDistance = abs(uv.y - ridge);
-  ridgeGlow = smoothstep(0.014, 0.0, ridgeDistance) * 0.055;
-  color = mix(color, layerColor, mountain * 0.78);
-  color += vec3(0.25, 0.12, 0.44) * ridgeGlow;
-  starMask *= 1.0 - mountain;
+  ridgeGlow = inverseSmoothstep(0.0, 0.014, ridgeDistance) * 0.055;
+  color = mix(color, layerColor, mountain * 0.94);
+  color += vec3(0.30, 0.13, 0.48) * ridgeGlow;
+  starMask *= clamp(1.0 - mountain, 0.0, 1.0);
 
-  layerColor = vec3(0.945, 0.930, 0.945);
+  layerColor = vec3(0.045, 0.025, 0.095);
   coordinate = uv.x * aspect * 4.0 + u_time * 0.044 + pointer.x * 0.070;
   verticalShift = pointer.y * 0.021;
   profile = fbm(coordinate, 5.0) * 0.11 + fbm(coordinate * 0.3 + 85.0, 3.0) * 0.077;
   ridge = 0.09 + profile + verticalShift;
-  mountain = smoothstep(ridge + 0.003, ridge - 0.001, uv.y);
+  mountain = inverseSmoothstep(ridge - 0.001, ridge + 0.003, uv.y);
   ridgeDistance = abs(uv.y - ridge);
-  ridgeGlow = smoothstep(0.014, 0.0, ridgeDistance) * 0.035;
-  color = mix(color, layerColor, mountain * 0.82);
-  color += vec3(0.25, 0.12, 0.44) * ridgeGlow;
-  starMask *= 1.0 - mountain;
+  ridgeGlow = inverseSmoothstep(0.0, 0.014, ridgeDistance) * 0.035;
+  color = mix(color, layerColor, mountain * 0.97);
+  color += vec3(0.26, 0.11, 0.42) * ridgeGlow;
+  starMask *= clamp(1.0 - mountain, 0.0, 1.0);
 
-  color -= vec3(0.20, 0.10, 0.34) * starField * starMask * 0.22;
+  color += vec3(0.78, 0.83, 1.0) * starField * starMask * 1.05;
   if (u_quality > 0.75) {
-    color -= vec3(0.24, 0.12, 0.40) * meteor(uv * vec2(aspect, 1.0), u_time) * starMask * 0.30;
+    color += vec3(0.72, 0.78, 1.0) * meteor(uv * vec2(aspect, 1.0), u_time) * starMask * 0.46;
   }
   float vignette = 1.0 - 0.10 * pow(length((uv - 0.5) * vec2(1.1, 1.5)), 2.0);
   color *= vignette;
-  color += vec3(0.10, 0.05, 0.20) * exp(-pow((uv.y - 0.33) * 5.0, 2.0)) * 0.025;
+  color += vec3(0.18, 0.08, 0.34) * exp(-pow((uv.y - 0.33) * 5.0, 2.0)) * 0.08;
   gl_FragColor = vec4(color, 1.0);
 }
 `;
@@ -284,9 +290,10 @@ export default function HeroBackground() {
           smoothPointerY += (pointerY - smoothPointerY) * 0.035;
           gl.useProgram(program);
           gl.uniform2f(resolution, canvas.width, canvas.height);
-          gl.uniform1f(time, elapsed * 0.00072);
+          gl.uniform1f(time, elapsed * 0.0009);
           gl.uniform2f(pointer, smoothPointerX, smoothPointerY);
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          if (root.dataset.ready !== "true") root.dataset.ready = "true";
           animationFrame = window.requestAnimationFrame(draw);
         };
 
@@ -300,7 +307,9 @@ export default function HeroBackground() {
             window.cancelAnimationFrame(animationFrame);
             animationFrame = 0;
           }
-          root.dataset.ready = String(contextAvailable && !reducedMotion.matches);
+          if (!inViewport || !pageVisible || !contextAvailable || reducedMotion.matches) {
+            root.dataset.ready = "false";
+          }
         };
 
         const onVisibilityChange = () => {

@@ -32,7 +32,6 @@ export default function HeroExperience() {
   return (
     <section className="experience-hero" aria-labelledby="experience-title">
       <HeroBackground />
-      <div className="experience-grid" aria-hidden="true" />
       <div className="experience-float experience-float--one" aria-hidden="true">01</div>
       <div className="experience-float experience-float--two" aria-hidden="true">AI / SYSTEMS</div>
       <div className="experience-container experience-hero__inner">
