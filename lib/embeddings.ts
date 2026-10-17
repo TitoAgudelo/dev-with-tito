@@ -1,15 +1,35 @@
-import { createHash } from "node:crypto";
-import { InferenceClient } from "@huggingface/inference";
 
-export const EMBEDDING_MODEL = "BAAI/bge-base-en-v1.5";
+import { createHash } from "node:crypto";
+import { GoogleGenAI } from "@google/genai";
+
+export const EMBEDDING_MODEL = "gemini-embedding-001";
 
 const EMBEDDING_DIMENSIONS = 768;
 const MAX_CACHE_ENTRIES = 512;
-const embeddingCache = new Map<string, number[]>();
+
+type CacheEntry = {
+  vector: number[];
+};
+
+const embeddingCache = new Map<string, CacheEntry>();
+
+let client: GoogleGenAI | undefined;
+
+function getClient(): GoogleGenAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Falta GEMINI_API_KEY en las variables de entorno.");
+  }
+
+  client ??= new GoogleGenAI({ apiKey });
+
+  return client;
+}
 
 function cacheKey(text: string): string {
   return createHash("sha256")
-    .update(`${EMBEDDING_MODEL}\0${text}`)
+    .update(`${EMBEDDING_MODEL}\0${EMBEDDING_DIMENSIONS}\0${text}`)
     .digest("hex");
 }
 
@@ -28,13 +48,9 @@ export async function generateEmbeddings(
 ): Promise<number[][]> {
   if (inputs.length === 0) return [];
 
-  const token = process.env.HF_TOKEN;
-  if (!token) throw new Error("Falta HF_TOKEN en .env.local.");
-
-  const client = new InferenceClient(token);
   const output: number[][] = [];
 
-  // Procesamiento secuencial para limitar solicitudes simultáneas.
+  // Procesamiento secuencial para limitar concurrencia y picos de uso.
   for (const input of inputs) {
     if (!input.trim()) {
       throw new Error("No se puede generar un embedding de texto vacío.");
@@ -44,26 +60,24 @@ export async function generateEmbeddings(
     const cached = embeddingCache.get(key);
 
     if (cached) {
-      output.push([...cached]);
+      output.push([...cached.vector]);
       continue;
     }
 
-    const result = await client.featureExtraction({
-      provider: "hf-inference",
+    const response = await getClient().models.embedContent({
       model: EMBEDDING_MODEL,
-      inputs: input,
+      contents: input,
+      config: {
+        outputDimensionality: EMBEDDING_DIMENSIONS,
+        taskType: "SEMANTIC_SIMILARITY",
+      },
     });
 
-    const vector: unknown =
-      Array.isArray(result) &&
-      result.length === 1 &&
-      Array.isArray(result[0])
-        ? result[0]
-        : result;
+    const vector: unknown = response.embeddings?.[0]?.values;
 
     if (!isValidEmbedding(vector)) {
       throw new Error(
-        "Hugging Face no devolvió un vector válido de 768 dimensiones.",
+        `Gemini no devolvió un vector válido de ${EMBEDDING_DIMENSIONS} dimensiones.`,
       );
     }
 
@@ -72,7 +86,7 @@ export async function generateEmbeddings(
       if (oldestKey !== undefined) embeddingCache.delete(oldestKey);
     }
 
-    embeddingCache.set(key, [...vector]);
+    embeddingCache.set(key, { vector: [...vector] });
     output.push([...vector]);
   }
 

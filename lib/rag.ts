@@ -2,7 +2,10 @@ import type { ChatCompletionMessageParam } from "openai/resources/chat/completio
 
 import type { AskTitoMetadata, AskTitoSource } from "../types/ask-tito";
 import { getSupabaseAdmin } from "./supabase-admin";
-import { EMBEDDING_MODEL, generateEmbedding } from "./embeddings";
+import {
+  GEMINI_EMBEDDING_MODEL,
+  generateGeminiEmbedding,
+} from "./gemini-embeddings";
 import { getOpenRouterClient, getOpenRouterModel } from "./openrouter";
 
 export const UNAVAILABLE_RESPONSE = "I don't have information about that.";
@@ -86,20 +89,20 @@ function isMetadata(value: unknown): value is AskTitoMetadata {
 export async function retrieveCareerContext(
   question: string,
 ): Promise<readonly AskTitoSource[]> {
-  const key = `${EMBEDDING_MODEL}:${question}`;
+  const key = `${GEMINI_EMBEDDING_MODEL}:${question}`;
   const cached = retrievalCache.get(key);
 
   if (cached && cached.expiresAt > Date.now()) {
     return cached.value;
   }
 
-  const queryEmbedding = await generateEmbedding(question);
+  const queryEmbedding = await generateGeminiEmbedding(question);
 
   const { data, error } = await getSupabaseAdmin().rpc(
     "match_career_documents",
     {
       query_embedding: queryEmbedding,
-      query_model: EMBEDDING_MODEL,
+      query_model: GEMINI_EMBEDDING_MODEL,
       match_count: TOP_K,
     },
   );

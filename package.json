@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=24.15.0 <25",
-    "npm": ">=11.6.2 <12"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
-  "packageManager": "npm@11.6.2",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,12 +14,15 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "lint": "eslint app hooks lib types tests",
-    "audit:prod": "npm audit --omit=dev --audit-level=high"
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "migrate:gemini": "tsx scripts/migrate-gemini.ts",
+    "ingest:gemini": "tsx scripts/ingest-gemini.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
-    "@huggingface/inference": "^4.13.28",
+    "@google/genai": "^2.30.0",
+    "@gsap/react": "^2.1.2",
     "@supabase/supabase-js": "^2.116.0",
     "framer-motion": "^13.2.0",
     "gsap": "^3.15.0",
