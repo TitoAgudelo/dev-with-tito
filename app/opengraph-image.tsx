@@ -24,7 +24,7 @@ export default function OpenGraphImage() {
       >
         <div style={{ display: "flex", width: 96, height: 8, marginBottom: 32, background: "#7c3aed" }} />
         <div style={{ display: "flex", fontSize: 112, fontWeight: 700, lineHeight: 1.05 }}>Tito Agudelo</div>
-        <div style={{ display: "flex", marginTop: 24, color: "#c4b5fd", fontSize: 34 }}>{OG_SUBTITLE}</div>
+        <div style={{ display: "flex", marginTop: 24, color: "#c4b5fd", fontSize: 30 }}>{OG_SUBTITLE}</div>
       </div>
     ),
     size,
