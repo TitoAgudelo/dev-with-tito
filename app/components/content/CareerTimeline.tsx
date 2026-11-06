@@ -18,7 +18,7 @@ export default function CareerTimeline({
           </p>
           <h3>{entry.role}</h3>
           <p>{entry.scope}</p>
-          {!compact ? (
+          {!compact && entry.highlights.length > 0 ? (
             <ul>
               {entry.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
             </ul>
