@@ -5,7 +5,7 @@ import test from "node:test";
 import robots from "../app/robots";
 import sitemap from "../app/sitemap";
 import { heroCopy } from "../content/hero";
-import { getImpactMetrics, profile, yearsExperience } from "../content/profile";
+import { experience, getImpactMetrics, profile, yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
 import { createPageMetadata, homeMetadata, rootMetadata } from "../lib/metadata";
 import { buildHomeStructuredData } from "../lib/structured-data";
@@ -181,4 +181,16 @@ test("subpages keep the OG image and do not repeat the name in their title", asy
   assert.match(JSON.stringify(metadata.openGraph), /"url":"\/opengraph-image"/);
   assert.match(JSON.stringify(metadata.twitter), /\/opengraph-image/);
   assert.doesNotMatch(await source("../app/about/page.tsx"), /title: "[^"]*Tito Agudelo/);
+});
+
+test("the title stays consistent and EPAM copy stays within verified facts", async () => {
+  assert.doesNotMatch(await source("../app/about/page.tsx"), /lead software engineer/i);
+  const epam = experience.find(({ id }) => id === "epam");
+  assert.equal(epam?.role, "Lead Software Engineer, EPAM Systems");
+  assert.deepEqual(epam?.highlights, []);
+  assert.doesNotMatch(epam?.scope ?? "", /AI-assisted|product platforms/);
+});
+
+test("the role highlight reacts to reduced-motion changes mid-session", async () => {
+  assert.match(await source("../app/components/experience/HeroExperience.tsx"), /addEventListener\("change"/);
 });

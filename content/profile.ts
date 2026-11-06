@@ -77,11 +77,8 @@ export const experience: readonly ExperienceEntry[] = [
     startDate: "2023",
     endDate: "2025",
     role: "Lead Software Engineer, EPAM Systems",
-    scope: "Architecture and delivery for product platforms and AI-assisted engineering workflows.",
-    highlights: [
-      "Align product intent with clear technical boundaries and incremental delivery plans.",
-      "Use AI as an engineering tool with reviewable inputs, outputs, and failure modes.",
-    ],
+    scope: "Technical leadership as a Lead Software Engineer.",
+    highlights: [],
   },
   {
     id: "senior",

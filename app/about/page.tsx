@@ -18,7 +18,7 @@ import SectionHeader from "../components/foundation/SectionHeader";
 export const metadata: Metadata = createPageMetadata({
   title: "Career and Background",
   description:
-    "The professional journey, engineering philosophy, leadership approach, and distributed collaboration style of lead software engineer Tito Agudelo.",
+    "The professional journey, engineering philosophy, leadership approach, and distributed collaboration style of senior software engineer Tito Agudelo.",
   path: "/about",
 });
 

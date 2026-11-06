@@ -21,12 +21,22 @@ export default function HeroExperience() {
   const [activeRole, setActiveRole] = useState(0);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const interval = window.setInterval(
-      () => setActiveRole((current) => (current + 1) % heroCopy.roles.length),
-      ROLE_HIGHLIGHT_INTERVAL_MS,
-    );
-    return () => window.clearInterval(interval);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let interval: number | undefined;
+    const syncHighlight = () => {
+      window.clearInterval(interval);
+      if (reducedMotion.matches) return;
+      interval = window.setInterval(
+        () => setActiveRole((current) => (current + 1) % heroCopy.roles.length),
+        ROLE_HIGHLIGHT_INTERVAL_MS,
+      );
+    };
+    syncHighlight();
+    reducedMotion.addEventListener("change", syncHighlight);
+    return () => {
+      window.clearInterval(interval);
+      reducedMotion.removeEventListener("change", syncHighlight);
+    };
   }, []);
 
   return (
