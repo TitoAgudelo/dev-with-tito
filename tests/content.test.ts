@@ -3,7 +3,6 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import { capabilities } from "../content/expertise";
-import { getYearsExperience } from "../content/profile";
 import { publishedProjects } from "../content/projects";
 import sitemap from "../app/sitemap";
 import { POST as submitContact } from "../app/api/send/route";
@@ -51,17 +50,13 @@ test("published case studies satisfy the NDA-safe structural gate", () => {
   }
 });
 
-test("experience length is derived from the authoritative career start", () => {
-  assert.equal(getYearsExperience(new Date("2026-09-09T00:00:00Z")), 14);
-});
-
 test("sitemap contains canonical content routes and excludes the contact fragment", () => {
   const urls = sitemap().map(({ url }) => url);
   for (const path of ["", "/work", "/expertise", "/about", "/ask", "/rag"]) {
-    assert.ok(urls.includes(`https://devwithtito.com${path}`));
+    assert.ok(urls.includes(`https://tito.website${path}`));
   }
   for (const project of publishedProjects) {
-    assert.ok(urls.includes(`https://devwithtito.com/work/${project.slug}`));
+    assert.ok(urls.includes(`https://tito.website/work/${project.slug}`));
   }
   assert.ok(urls.every((url) => !url.includes("#contact") && !url.endsWith("/contact")));
 });

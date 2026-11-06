@@ -2,7 +2,7 @@
 
 ## Career Overview
 
-Tito Agudelo is a Senior Software Engineer and technical leader based in Bogotá, Colombia, with more than 13 years of experience building web applications, mobile products, marketplaces, ecommerce platforms, SaaS products, enterprise systems, and AI-powered applications.
+Tito Agudelo is a Senior Software Engineer and technical leader based in Bogotá, Colombia, with 13+ years of experience building web applications, mobile products, marketplaces, ecommerce platforms, SaaS products, enterprise systems, and AI-powered applications.
 
 His career combines hands-on frontend and mobile engineering, full-stack product development, software architecture, technical consulting, and engineering leadership. He has worked with established companies, growing product teams, and clients across different industries and technical environments.
 
@@ -32,7 +32,37 @@ This means that Toptal and the client companies listed in his professional histo
 
 When asked why Tito has worked with several companies or why his employment dates overlap, explain that he has maintained a long-term freelance consulting career through Toptal since 2016 while contributing to different client products. He seeks long-term engagements but remains open to new opportunities when client needs or project scopes change.
 
-## Gametime — Senior React Native Engineer
+## Current Role
+
+**Senior Software Engineer at Gametime (React Native).** Gametime is Tito's current employer. Toptal is a talent network and part of his consulting history, not his current employer.
+
+## EPAM Systems — Lead Software Engineer
+
+**Period:** 2023–2025
+
+Tito worked as a Lead Software Engineer at EPAM Systems. Project-specific responsibilities should be added when verified.
+
+## Earlier Companies
+
+Tito's earlier experience includes 834 Labs and GoLabs. Role details should be added when verified.
+
+## Talent Networks
+
+Tito is part of the Toptal, X-Team, and Braintrust talent networks.
+
+## Education
+
+Computer Science, Universidad Piloto de Colombia.
+
+## Languages
+
+Spanish (native) and English (professional).
+
+## Solutions Architecture Positioning
+
+Solutions architecture is a service Tito offers, through architecture reviews and system design. It is not a past job title and should not be described as one.
+
+## Gametime — Senior Software Engineer (React Native)
 
 **Focus:** Mobile engineering, product growth, application reliability, and user experience.
 
@@ -75,7 +105,7 @@ His work included:
 
 ## Toptal — Senior Software Engineer and Independent Consultant
 
-**Period:** 2016–Present
+**Period:** From 2016 (talent network and consulting history, not his current employer)
 
 **Focus:** Full-stack development, mobile engineering, technical consulting, architecture, and collaboration with distributed teams.
 

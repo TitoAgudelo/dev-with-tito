@@ -8,7 +8,8 @@ export interface MetricData {
 export interface ExperienceEntry {
   readonly id: string;
   readonly period: string;
-  readonly startDate: string;
+  /** Omitted when the start year is not yet verified. */
+  readonly startDate?: string;
   readonly endDate?: string;
   readonly role: string;
   readonly scope: string;
@@ -21,14 +22,11 @@ export interface Principle {
   readonly summary: string;
 }
 
-const careerStartYear = 2012;
-
-export function getYearsExperience(referenceDate = new Date()): number {
-  return referenceDate.getUTCFullYear() - careerStartYear;
-}
+/** Single source for the public experience claim. Change it here and every surface follows. */
+export const yearsExperience = "13+";
 
 export const profile = {
-  role: "Staff Software Engineer & AI Architect",
+  role: "Senior Software Engineer",
   positioning: "Systems-minded engineering across web, mobile, platform, and pragmatic AI.",
   summary:
     "I help teams turn complex product requirements into reliable software: clear interfaces, maintainable architecture, accessible experiences, and delivery systems that hold up beyond launch.",
@@ -38,16 +36,15 @@ export const profile = {
     "I work best in small, accountable groups where product, design, and engineering share context early. I write decisions down, surface tradeoffs before they become surprises, and keep progress visible across distributed teams.",
   leadership:
     "My leadership style is clarity over ceremony: define the outcome, make ownership explicit, reduce avoidable coupling, and give engineers enough context to make good local decisions.",
-  careerStartYear,
 } as const;
 
-export function getImpactMetrics(referenceDate = new Date()): readonly MetricData[] {
+export function getImpactMetrics(): readonly MetricData[] {
   return [
     {
       id: "experience",
-      value: `${getYearsExperience(referenceDate)} years`,
+      value: `${yearsExperience} years`,
       label: "building production software",
-      qualification: "Derived from a 2012 career start",
+      qualification: "Across web, mobile, and AI products",
     },
     {
       id: "contexts",
@@ -66,15 +63,22 @@ export function getImpactMetrics(referenceDate = new Date()): readonly MetricDat
 
 export const experience: readonly ExperienceEntry[] = [
   {
-    id: "lead",
-    period: "2024 — Present",
-    startDate: "2024",
-    role: "Lead Software Engineer",
-    scope: "Architecture and delivery for product platforms and AI-assisted engineering workflows.",
+    id: "gametime",
+    period: "Current",
+    role: "Senior Software Engineer, Gametime",
+    scope: "React Native engineering for a mobile-first ticket marketplace.",
     highlights: [
-      "Align product intent with clear technical boundaries and incremental delivery plans.",
-      "Use AI as an engineering tool with reviewable inputs, outputs, and failure modes.",
+      "Work across mobile engineering, product growth, application reliability, and user experience.",
     ],
+  },
+  {
+    id: "epam",
+    period: "2023 — 2025",
+    startDate: "2023",
+    endDate: "2025",
+    role: "Lead Software Engineer, EPAM Systems",
+    scope: "Technical leadership as a Lead Software Engineer.",
+    highlights: [],
   },
   {
     id: "senior",

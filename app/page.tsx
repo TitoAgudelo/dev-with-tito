@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 
 import { featuredProjects } from "../content/projects";
-import { getYearsExperience, profile } from "../content/profile";
+import { yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
+import { homeMetadata } from "../lib/metadata";
+import { buildHomeStructuredData } from "../lib/structured-data";
 import JsonLd from "./components/content/JsonLd";
 import AIPlayground from "./components/experience/AIPlayground";
 import CapabilityOrbit from "./components/experience/CapabilityOrbit";
@@ -13,14 +15,10 @@ import ImpactMetrics, { type ExperienceMetric } from "./components/experience/Im
 import PhilosophyReveal from "./components/experience/PhilosophyReveal";
 import TerminalCTA from "./components/experience/TerminalCTA";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  title: "AI Systems Architect & Staff Software Engineer",
-  description: "Tito Agudelo designs resilient product platforms and pragmatic AI systems across web, mobile, cloud, and applied AI.",
-};
+export const metadata: Metadata = homeMetadata;
 
 const metrics: readonly ExperienceMetric[] = [
-  { value: `${getYearsExperience()}`, label: "years in production engineering", note: "Career history from 2012 to present" },
+  { value: yearsExperience, label: "years in production engineering", note: "Across web, mobile, and AI products" },
   { value: "5", label: "product environments", note: "Marketplaces, commerce, ticketing, food tech, enterprise" },
   { value: "3", label: "delivery surfaces", note: "Web, mobile, and platform systems" },
   { value: "AA", label: "accessibility baseline", note: "Quality designed into the delivery path" },
@@ -29,18 +27,7 @@ const metrics: readonly ExperienceMetric[] = [
 export default function Home() {
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: siteConfig.name,
-          url: siteConfig.canonicalOrigin,
-          jobTitle: profile.role,
-          description: profile.positioning,
-          sameAs: siteConfig.socialProfiles.map((item) => item.url),
-          knowsAbout: ["AI systems", "Frontend architecture", "React", "React Native", "TypeScript", "Platform engineering"],
-        }}
-      />
+      <JsonLd data={buildHomeStructuredData()} />
       <ExperienceMotionProvider>
         <HeroExperience />
         <ImpactMetrics metrics={metrics} />

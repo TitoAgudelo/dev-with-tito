@@ -19,9 +19,10 @@ export interface SocialProfile {
 
 export const siteConfig = {
   name: "Tito Agudelo",
-  siteName: "Dev With Tito",
-  canonicalOrigin: "https://devwithtito.com",
+  siteName: "Tito Agudelo",
+  canonicalOrigin: "https://tito.website",
   email: "titoarturoagudelo@gmail.com",
+  location: "Bogotá, Colombia",
   resume: {
     url: "/docs/Tito-Agudelo-Resume-2025.pdf",
     label: "Résumé (PDF)",

@@ -6,7 +6,7 @@
 
 ## 1. Mission
 
-Build a narrative, cinematic web experience (not a traditional portfolio) that positions Tito Agudelo as Staff Engineer / Mobile Architect / Product Builder / AI Engineer, and generates qualified leads for React Native consulting, mobile architecture, AI product development, full stack engineering, architecture reviews, and fractional technical leadership.
+Build a narrative, cinematic web experience (not a traditional portfolio) that positions Tito Agudelo as Senior Software Engineer / Mobile Architect / Product Builder / AI Engineer, and generates qualified leads for React Native consulting, mobile architecture, AI product development, full stack engineering, architecture reviews, and fractional technical leadership.
 
 The site exists so that a technical visitor (CTO, founder, hiring manager) leaves with: curiosity, technical confidence, a clear understanding of Tito's experience, and the desire to schedule a call.
 
@@ -22,7 +22,7 @@ If a specific prompt asks for something that contradicts these documents, flag i
 ## 3. Design principles (summary — see DESIGN.md for full detail)
 
 - Central metaphor: **System Assembly** — the system assembles in 5 layers as the visitor scrolls (Infrastructure → System → Product → Experience → Business).
-- A single accent color (`#C9932E`). Zero purple/blue gradients. Zero diffuse glow.
+- A single accent color (`#7C3AED`). Zero purple/blue gradients. Zero diffuse glow.
 - Typography: Fraunces (display) + Inter/Satoshi (body) + JetBrains Mono (metadata/console).
 - All motion must communicate "this is being built" — scroll-driven, not timer-driven, no bounce/spring.
 - `prefers-reduced-motion` is a real design state, not an afterthought: layers appear already assembled.

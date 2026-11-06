@@ -37,7 +37,7 @@ export default function AIPlayground() {
     <section className="playground-section" aria-labelledby="playground-title">
       <div className="experience-container">
         <header className="playground-header">
-          <div><p className="experience-kicker">05 · AI playground</p><h2 id="playground-title">Prototypes with boundaries.</h2></div>
+          <div><p className="experience-kicker">05 · AI playground</p><h2 id="playground-title">AI prototypes with boundaries.</h2></div>
           <p>Small, inspectable demonstrations—not vague claims about intelligence.</p>
         </header>
         <div className="playground-grid">

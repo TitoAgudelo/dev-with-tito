@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { publishedProjects } from "../content/projects";
 import { siteConfig } from "../content/site";
 
-const lastModified = new Date("2026-09-09T00:00:00.000Z");
+const lastModified = new Date("2026-11-06T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = ["", "/work", "/expertise", "/about", "/ask", "/rag"];

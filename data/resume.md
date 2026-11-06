@@ -46,9 +46,17 @@ LLM API integration, prompt engineering, Gemini embeddings, RAG workflows, vecto
 
 ## Professional Experience
 
+### Senior Software Engineer — Gametime (React Native)
+
+**Current**
+
+### Lead Software Engineer — EPAM Systems
+
+**2023–2025**
+
 ### Independent Software Engineering Consultant — Toptal
 
-**2016–Present**
+**From 2016 (talent network and consulting history)**
 
 Independent consulting across multiple client engagements and product environments. Work includes frontend and mobile engineering, full-stack development, API integration, e-commerce, content management systems, and cloud-connected applications.
 

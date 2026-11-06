@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { capabilities } from "../../content/expertise";
-import { experience, getYearsExperience, principles, profile } from "../../content/profile";
+import { experience, principles, profile, yearsExperience } from "../../content/profile";
 import { siteConfig } from "../../content/site";
 import { createPageMetadata } from "../../lib/metadata";
+import { personId } from "../../lib/structured-data";
 import CareerTimeline from "../components/content/CareerTimeline";
 import ContactCTA from "../components/content/ContactCTA";
 import JsonLd from "../components/content/JsonLd";
@@ -15,9 +16,9 @@ import Section from "../components/foundation/Section";
 import SectionHeader from "../components/foundation/SectionHeader";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "About Tito Agudelo",
+  title: "Career and Background",
   description:
-    "The professional journey, engineering philosophy, leadership approach, and distributed collaboration style of lead software engineer Tito Agudelo.",
+    "The professional journey, engineering philosophy, leadership approach, and distributed collaboration style of senior software engineer Tito Agudelo.",
   path: "/about",
 });
 
@@ -31,6 +32,7 @@ export default function AboutPage() {
           url: `${siteConfig.canonicalOrigin}/about`,
           mainEntity: {
             "@type": "Person",
+            "@id": personId,
             name: siteConfig.name,
             jobTitle: profile.role,
             url: siteConfig.canonicalOrigin,
@@ -40,7 +42,7 @@ export default function AboutPage() {
         }}
       />
       <PageHero
-        eyebrow={`${profile.role} · ${getYearsExperience()} years in software`}
+        eyebrow={`${profile.role} · ${yearsExperience} years in software`}
         title="I lead with context, boundaries, and practical delivery."
         description={`${profile.shortBiography} Today I focus on the architecture and team practices that make ambitious product work easier to understand, ship, and operate.`}
       >

@@ -233,7 +233,7 @@ export const STATIC_COMMANDS: Record<string, CommandHandler> = {
     { id: '1', type: 'system', content: 'Available commands: about, experience, skills, projects, services, contact, clear', timestamp: new Date().toISOString() }
   ],
   whoami: async () => [
-    { id: '2', type: 'output', content: 'Tito Agudelo — Staff Software Engineer & Mobile Architect', timestamp: new Date().toISOString() }
+    { id: '2', type: 'output', content: 'Tito Agudelo — Senior Software Engineer & Mobile Architect', timestamp: new Date().toISOString() }
   ],
   ls: async () => [
     { id: '3', type: 'output', content: 'about.md  experience.md  skills.md  services.md  projects/', timestamp: new Date().toISOString() }

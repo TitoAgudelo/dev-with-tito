@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const roles = ["Staff Software Engineer", "Platform Architect", "AI Builder"] as const;
+import { heroCopy } from "../../../content/hero";
+
+const ROLE_HIGHLIGHT_INTERVAL_MS = 2400;
 
 const HeroBackground = dynamic(() => import("./HeroBackground"), {
   ssr: false,
@@ -18,16 +19,25 @@ const HeroBackground = dynamic(() => import("./HeroBackground"), {
 
 export default function HeroExperience() {
   const [activeRole, setActiveRole] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
-    const interval = window.setInterval(
-      () => setActiveRole((current) => (current + 1) % roles.length),
-      2400,
-    );
-    return () => window.clearInterval(interval);
-  }, [shouldReduceMotion]);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let interval: number | undefined;
+    const syncHighlight = () => {
+      window.clearInterval(interval);
+      if (reducedMotion.matches) return;
+      interval = window.setInterval(
+        () => setActiveRole((current) => (current + 1) % heroCopy.roles.length),
+        ROLE_HIGHLIGHT_INTERVAL_MS,
+      );
+    };
+    syncHighlight();
+    reducedMotion.addEventListener("change", syncHighlight);
+    return () => {
+      window.clearInterval(interval);
+      reducedMotion.removeEventListener("change", syncHighlight);
+    };
+  }, []);
 
   return (
     <section className="experience-hero" aria-labelledby="experience-title">
@@ -35,45 +45,34 @@ export default function HeroExperience() {
       <div className="experience-float experience-float--one" aria-hidden="true">01</div>
       <div className="experience-float experience-float--two" aria-hidden="true">AI / SYSTEMS</div>
       <div className="experience-container experience-hero__inner">
-        <LazyMotion features={domAnimation}>
-          <m.p
-            className="experience-kicker"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Tito Agudelo · Systems-minded product engineering
-          </m.p>
-          <h1 id="experience-title" className="experience-display">
-            <m.span
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 64 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            >AI Systems.</m.span>
-            <m.span
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 64 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            >Built To Scale.</m.span>
-          </h1>
-          <div className="role-rotator" aria-label={roles.join(", ")}>
-            <span className="role-rotator__index" aria-hidden="true">0{activeRole + 1}</span>
-            <span className="role-rotator__window" aria-hidden="true">
-              <AnimatePresence mode="wait">
-                <m.span
-                  key={roles[activeRole]}
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 20, filter: "blur(5px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -20, filter: "blur(5px)" }}
-                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                >{roles[activeRole]}</m.span>
-              </AnimatePresence>
-            </span>
+        <h1 id="experience-title" className="experience-hero__title">
+          <span className="experience-kicker hero-reveal hero-reveal--kicker">{heroCopy.eyebrow}</span>
+          <span className="visually-hidden"> — </span>
+          <span className="experience-display">
+            <span className="hero-reveal hero-reveal--line-1">{heroCopy.headline[0]}</span>{" "}
+            <span className="hero-reveal hero-reveal--line-2">{heroCopy.headline[1]}</span>
+          </span>
+        </h1>
+        <div className="experience-hero__details hero-reveal hero-reveal--details">
+          <p className="experience-hero__lead">{heroCopy.lead}</p>
+          <div className="experience-hero__actions">
+            <a className="button-link button-link--primary" href={heroCopy.primaryCta.href}>{heroCopy.primaryCta.label}</a>
+            <a className="hero-scroll-cue" href={heroCopy.secondaryCta.href}>
+              <span>{heroCopy.secondaryCta.label}</span><span aria-hidden="true">↓</span>
+            </a>
           </div>
-        </LazyMotion>
-        <a className="hero-scroll-cue" href="#impact">
-          <span>Explore the system</span><span aria-hidden="true">↓</span>
-        </a>
+          <div className="role-list">
+            <span id="hero-roles-label" className="role-list__label">{heroCopy.rolesLabel}</span>
+            <ul aria-labelledby="hero-roles-label">
+              {heroCopy.roles.map((role, index) => (
+                <li key={role} data-active={index === activeRole ? "true" : undefined}>{role}</li>
+              ))}
+            </ul>
+          </div>
+          <p className="experience-hero__shipped">
+            <span>{heroCopy.shippedAtLabel}</span> {heroCopy.shippedAt.join(" · ")}
+          </p>
+        </div>
       </div>
     </section>
   );

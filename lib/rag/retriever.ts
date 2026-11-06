@@ -1,5 +1,5 @@
 import type { RAGDocument, RAGSource } from "../../types/rag";
-import { getYearsExperience } from "../../content/profile";
+import { yearsExperience } from "../../content/profile";
 
 /**
  * In-memory knowledge base. Small on purpose: this is a portfolio demo
@@ -10,8 +10,8 @@ const KNOWLEDGE_BASE: readonly RAGDocument[] = [
     id: "experience",
     title: "Experience overview",
     content:
-      `Tito Agudelo is a Staff Software Engineer and AI Architect with ${getYearsExperience()} years of professional experience building web, mobile, and platform products. He has delivered projects for early-stage startups and large enterprises across frontend, backend, and infrastructure.`,
-    tags: ["experience", "career", "staff", "architect", "engineer"],
+      `Tito Agudelo is a Senior Software Engineer with ${yearsExperience} years of professional experience building web, mobile, and platform products. He has delivered projects for early-stage startups and large enterprises across frontend, backend, and infrastructure.`,
+    tags: ["experience", "career", "senior", "architect", "engineer"],
   },
   {
     id: "remote-work",
