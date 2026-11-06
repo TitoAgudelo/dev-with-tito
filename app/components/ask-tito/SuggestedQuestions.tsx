@@ -8,7 +8,7 @@ export const SUGGESTED_QUESTIONS = [
   "How many users has Tito supported?",
   "What leadership experience does Tito have?",
   "What cloud technologies has Tito used?",
-  "Why hire Tito as a Staff Engineer?",
+  "Why hire Tito as a Senior Engineer?",
 ] as const;
 
 function SuggestedQuestionsComponent({ onSelect, disabled }: {

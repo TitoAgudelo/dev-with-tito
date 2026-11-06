@@ -4,19 +4,17 @@ import MainContent from "./components/shell/MainContent";
 import SiteFooter from "./components/shell/SiteFooter";
 import SiteHeader from "./components/shell/SiteHeader";
 import SkipLink from "./components/shell/SkipLink";
-import { getYearsExperience } from "../content/profile";
+import { yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
-
-const yearsExperience = getYearsExperience();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.canonicalOrigin),
   title: {
-    default: "Tito Agudelo — Staff Software Engineer & AI Architect",
+    default: "Tito Agudelo — Senior Software Engineer",
     template: "%s · Tito Agudelo",
   },
   description:
-    `Staff software engineer and AI architect with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
+    `Senior software engineer with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
   keywords: [
     "Tito Agudelo",
     "Software Engineer",
@@ -30,17 +28,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Tito Agudelo" }],
   openGraph: {
-    title: "Tito Agudelo — Staff Software Engineer & AI Architect",
+    title: "Tito Agudelo — Senior Software Engineer",
     description:
-      `Staff software engineer and AI architect with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
+      `Senior software engineer with ${yearsExperience} years building product systems across web, mobile, platform, and pragmatic AI.`,
     url: siteConfig.canonicalOrigin,
-    siteName: "Dev With Tito",
+    siteName: siteConfig.siteName,
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tito Agudelo — Staff Software Engineer & AI Architect",
+    title: "Tito Agudelo — Senior Software Engineer",
     description:
       `${yearsExperience} years building product systems across web, mobile, platform, and applied AI delivery.`,
   },

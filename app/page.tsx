@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { featuredProjects } from "../content/projects";
-import { getYearsExperience, profile } from "../content/profile";
+import { profile, yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
 import JsonLd from "./components/content/JsonLd";
 import AIPlayground from "./components/experience/AIPlayground";
@@ -15,12 +15,12 @@ import TerminalCTA from "./components/experience/TerminalCTA";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
-  title: "AI Systems Architect & Staff Software Engineer",
+  title: "Senior Software Engineer",
   description: "Tito Agudelo designs resilient product platforms and pragmatic AI systems across web, mobile, cloud, and applied AI.",
 };
 
 const metrics: readonly ExperienceMetric[] = [
-  { value: `${getYearsExperience()}`, label: "years in production engineering", note: "Career history from 2012 to present" },
+  { value: yearsExperience, label: "years in production engineering", note: "Across web, mobile, and AI products" },
   { value: "5", label: "product environments", note: "Marketplaces, commerce, ticketing, food tech, enterprise" },
   { value: "3", label: "delivery surfaces", note: "Web, mobile, and platform systems" },
   { value: "AA", label: "accessibility baseline", note: "Quality designed into the delivery path" },

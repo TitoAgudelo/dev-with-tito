@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { capabilities } from "../../content/expertise";
-import { experience, getYearsExperience, principles, profile } from "../../content/profile";
+import { experience, principles, profile, yearsExperience } from "../../content/profile";
 import { siteConfig } from "../../content/site";
 import { createPageMetadata } from "../../lib/metadata";
 import CareerTimeline from "../components/content/CareerTimeline";
@@ -40,7 +40,7 @@ export default function AboutPage() {
         }}
       />
       <PageHero
-        eyebrow={`${profile.role} · ${getYearsExperience()} years in software`}
+        eyebrow={`${profile.role} · ${yearsExperience} years in software`}
         title="I lead with context, boundaries, and practical delivery."
         description={`${profile.shortBiography} Today I focus on the architecture and team practices that make ambitious product work easier to understand, ship, and operate.`}
       >

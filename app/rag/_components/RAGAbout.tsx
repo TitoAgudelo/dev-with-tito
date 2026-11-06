@@ -1,9 +1,7 @@
-import { getYearsExperience } from "../../../content/profile";
-
-const yearsExperience = getYearsExperience();
+import { yearsExperience } from "../../../content/profile";
 
 const facts: ReadonlyArray<{ label: string; value: string }> = [
-  { label: "Years in software", value: `${yearsExperience}` },
+  { label: "Years in software", value: yearsExperience },
   { label: "Remote since", value: "2016" },
   { label: "Team footprint", value: "US + global" },
   { label: "Primary stack", value: "React · Next.js · TS" },

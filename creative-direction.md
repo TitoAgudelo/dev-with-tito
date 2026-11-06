@@ -10,7 +10,7 @@
 
 ## 1. Visión y Metáfora Central: System Assembly
 
-El propósito de **Tito.website** no es listar credenciales en un formato de currículum web tradicional, sino **dramatizar el modelo mental de un Staff Engineer y Mobile Architect**.
+El propósito de **Tito.website** no es listar credenciales en un formato de currículum web tradicional, sino **dramatizar el modelo mental de un Senior Software Engineer y Mobile Architect**.
 
 El sitio opera bajo una metáfora visual cerrada y fundacional: **System Assembly**.
 
@@ -166,7 +166,7 @@ Para garantizar una postura estética radicalmente diferenciada, el diseño rech
    - *Nuestra identidad:* Cada animación tiene una causa física y lógica en el sistema: es una línea de plano dibujándose, un módulo acoplándose o una respuesta inmediata a un comando de usuario. Curvas de easing severas y precisas (`power2.out`, `expo.out`). Si un elemento no comunica arquitectura o producto, se elimina.
 3. ❌ **NO es "Ruidoso" (Anti Desesperado / Agresivo Comercial):**
    - *Por qué:* Las landing pages de venta agresiva recurren a banners de urgencia ("¡Contrátame ya!"), popups flotantes, titulares inflados de auto-promoción ("10x Rockstar") y colores estridentes.
-   - *Nuestra identidad:* La presencia de Tito se comunica con **autoridad serena (Staff/Principal presence)**. El tono es técnico, medido, claro y respaldado por la experiencia real en empresas líderes (Gametime, Fanatics, TaskRabbit). El sitio invita a una conversación técnica entre pares.
+   - *Nuestra identidad:* La presencia de Tito se comunica con **autoridad serena (Senior presence)**. El tono es técnico, medido, claro y respaldado por la experiencia real en empresas líderes (Gametime, Fanatics, TaskRabbit). El sitio invita a una conversación técnica entre pares.
 
 ---
 

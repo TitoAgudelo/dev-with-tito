@@ -14,7 +14,7 @@ export default function CareerTimeline({
       {visibleEntries.map((entry) => (
         <li key={entry.id} className="career-entry">
           <p className="type-label">
-            <time dateTime={entry.startDate}>{entry.period}</time>
+            {entry.startDate ? <time dateTime={entry.startDate}>{entry.period}</time> : <span>{entry.period}</span>}
           </p>
           <h3>{entry.role}</h3>
           <p>{entry.scope}</p>

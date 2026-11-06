@@ -2,7 +2,7 @@
 
 ## Professional Profile
 
-Tito Agudelo is a Senior Software Engineer and technical leader based in Bogotá, Colombia, with more than 13 years of experience building web applications, mobile products, SaaS platforms, marketplaces, ecommerce solutions, enterprise systems, and AI-powered products.
+Tito Agudelo is a Senior Software Engineer and technical leader based in Bogotá, Colombia, with 13+ years of experience building web applications, mobile products, SaaS platforms, marketplaces, ecommerce solutions, enterprise systems, and AI-powered products.
 
 He combines hands-on engineering with product thinking, software architecture, and technical leadership. His focus is on building reliable, maintainable software that solves real business problems while delivering a strong user experience.
 
