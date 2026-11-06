@@ -4,6 +4,7 @@ import test from "node:test";
 
 import robots from "../app/robots";
 import sitemap from "../app/sitemap";
+import { heroCopy } from "../content/hero";
 import { getImpactMetrics, profile, yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
 import { homeMetadata, rootMetadata } from "../lib/metadata";
@@ -97,4 +98,41 @@ test("the homepage renders the graph instead of a standalone Person", async () =
   const page = await source("../app/page.tsx");
   assert.match(page, /buildHomeStructuredData/);
   assert.doesNotMatch(page, /"@type": "Person"/);
+});
+
+test("hero copy is specific, honest about Fanatics, and complete", () => {
+  assert.equal(heroCopy.eyebrow, "Tito Agudelo · Senior Software Engineer · Bogotá / Remote");
+  assert.deepEqual(heroCopy.headline, ["Mobile & AI Products.", "Built To Scale."]);
+  assert.match(heroCopy.lead, new RegExp(`^Senior full-stack engineer with ${yearsExperience.replace("+", "\\+")} years`));
+  assert.match(heroCopy.lead, /mobile and web products with React Native/);
+  assert.deepEqual(heroCopy.roles, [
+    "Software Engineer",
+    "AI Engineer",
+    "Solutions Architect",
+    "Mobile Architect",
+    "React Native Consultant",
+  ]);
+  assert.deepEqual(heroCopy.shippedAt, ["Gametime", "Fanatics", "TaskRabbit", "Toptal"]);
+  assert.equal(heroCopy.primaryCta.href, "#contact");
+});
+
+test("the hero h1 wraps the eyebrow and every role stays in server HTML", async () => {
+  const hero = await source("../app/components/experience/HeroExperience.tsx");
+  const h1 = hero.slice(hero.indexOf("<h1"), hero.indexOf("</h1>"));
+  assert.match(h1, /heroCopy\.eyebrow/);
+  assert.match(h1, /heroCopy\.headline/);
+  assert.match(hero, /heroCopy\.roles\.map/);
+  assert.doesNotMatch(hero.slice(hero.indexOf("<ul"), hero.indexOf("</ul>")), /aria-hidden/);
+});
+
+test("the hero entrance is CSS-driven so text paints before hydration", async () => {
+  const hero = await source("../app/components/experience/HeroExperience.tsx");
+  const stylesheet = await source("../app/globals.css");
+  assert.doesNotMatch(hero, /framer-motion/);
+  assert.match(stylesheet, /@keyframes hero-rise/);
+  assert.match(stylesheet, /\.hero-reveal--kicker[^}]*600ms/);
+  assert.match(stylesheet, /\.hero-reveal--line-1[^}]*900ms[^}]*80ms/);
+  assert.match(stylesheet, /\.hero-reveal--line-2[^}]*900ms[^}]*160ms/);
+  assert.match(stylesheet, /cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
+  assert.match(stylesheet, /prefers-reduced-motion: reduce\) \{\s*\.hero-reveal \{\s*animation: none/);
 });
