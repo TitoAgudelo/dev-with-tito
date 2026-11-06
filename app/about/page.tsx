@@ -5,6 +5,7 @@ import { capabilities } from "../../content/expertise";
 import { experience, principles, profile, yearsExperience } from "../../content/profile";
 import { siteConfig } from "../../content/site";
 import { createPageMetadata } from "../../lib/metadata";
+import { personId } from "../../lib/structured-data";
 import CareerTimeline from "../components/content/CareerTimeline";
 import ContactCTA from "../components/content/ContactCTA";
 import JsonLd from "../components/content/JsonLd";
@@ -31,6 +32,7 @@ export default function AboutPage() {
           url: `${siteConfig.canonicalOrigin}/about`,
           mainEntity: {
             "@type": "Person",
+            "@id": personId,
             name: siteConfig.name,
             jobTitle: profile.role,
             url: siteConfig.canonicalOrigin,

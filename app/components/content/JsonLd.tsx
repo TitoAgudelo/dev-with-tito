@@ -1,5 +1,5 @@
 interface JsonLdProps {
-  readonly data: Record<string, unknown>;
+  readonly data: object;
 }
 
 export default function JsonLd({ data }: JsonLdProps) {
