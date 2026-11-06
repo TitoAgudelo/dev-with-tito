@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { profile as owner } from "../../../content/profile";
 import { publishedNavigation, siteConfig } from "../../../content/site";
 import Container from "../foundation/Container";
 import SiteLogo from "./SiteLogo";
@@ -22,7 +23,7 @@ export default function SiteFooter() {
               </li>
               {siteConfig.socialProfiles.map((profile) => (
                 <li key={profile.id}>
-                  <a href={profile.url} target="_blank" rel="noreferrer">
+                  <a href={profile.url} target="_blank" rel="me noreferrer">
                     {profile.label}
                     <span className="visually-hidden"> (opens in a new tab)</span>
                   </a>
@@ -36,7 +37,7 @@ export default function SiteFooter() {
         </div>
         <div className="site-footer__meta">
           <p>&copy; {new Date().getFullYear()} {siteConfig.name}.</p>
-          <p>Built for speed, access, and resilient delivery.</p>
+          <p>{owner.role} · {siteConfig.location} · Remote worldwide</p>
         </div>
       </Container>
     </footer>

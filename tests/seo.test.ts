@@ -136,3 +136,42 @@ test("the hero entrance is CSS-driven so text paints before hydration", async ()
   assert.match(stylesheet, /cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
   assert.match(stylesheet, /prefers-reduced-motion: reduce\) \{\s*\.hero-reveal \{\s*animation: none/);
 });
+
+test("section headings carry honest keywords", async () => {
+  const stories = await source("../app/components/experience/CaseStudyStories.tsx");
+  const terminal = await source("../app/components/experience/TerminalCTA.tsx");
+  assert.match(await source("../app/components/experience/CapabilityOrbit.tsx"), /<h2[^>]*>Solutions architecture, mapped\.<\/h2>/);
+  assert.match(stories, /<h2[^>]*>Mobile and web work at Gametime, Fanatics, TaskRabbit\.<\/h2>/);
+  assert.doesNotMatch(stories, /<h2[^>]*>[^<]*React Native[^<]*Fanatics/);
+  assert.match(await source("../app/components/experience/AIPlayground.tsx"), /AI prototypes with boundaries\./);
+  assert.match(terminal, /<h2[^>]*>React Native and AI consulting\.<\/h2>/);
+  assert.match(terminal, /fractional technical leadership/i);
+});
+
+test("the footer states identity and marks owned profiles with rel=me", async () => {
+  const footer = await source("../app/components/shell/SiteFooter.tsx");
+  assert.match(footer, /owner\.role/);
+  assert.match(footer, /siteConfig\.location/);
+  assert.match(footer, /rel="me noreferrer"/);
+});
+
+test("the logo accessible name contains its visible text", async () => {
+  assert.doesNotMatch(await source("../app/components/shell/SiteLogo.tsx"), /aria-label=/);
+});
+
+test("the Open Graph image shows the current identity on the purple palette", async () => {
+  const image = await source("../app/opengraph-image.tsx");
+  assert.match(image, /Senior Software Engineer · React Native · AI · Solutions Architecture/);
+  assert.match(image, /#7c3aed/i);
+  assert.doesNotMatch(image, /Lead Software Engineer|DEV WITH TITO|https?:\/\//);
+});
+
+test("the sitemap reports the date of this content update", () => {
+  assert.ok(sitemap().every(({ lastModified }) => new Date(lastModified as Date).getTime() >= Date.UTC(2026, 10, 6)));
+});
+
+test("DESIGN.md records purple as the single accent", async () => {
+  const design = await source("../DESIGN.md");
+  assert.match(design, /Single accent \| `#7C3AED`/);
+  assert.doesNotMatch(design, /C9932E|bronze/i);
+});

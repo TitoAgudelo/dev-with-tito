@@ -1784,7 +1784,9 @@ select {
   text-transform: uppercase;
 }
 
-.experience-kicker--light {
+.experience-kicker--light,
+.impact-intro .experience-kicker,
+.case-studies__header .experience-kicker {
   color: #c4b5fd;
 }
 
@@ -2156,7 +2158,7 @@ select {
 
 .impact-item__index {
   grid-row: 1 / 4;
-  color: #8b5cf6;
+  color: #c4b5fd;
   font-family: var(--font-family-mono);
   font-size: 0.625rem;
 }
@@ -2345,7 +2347,7 @@ select {
 }
 
 .case-studies__header h2 {
-  max-width: 10ch;
+  max-width: 18ch;
   font-size: var(--font-size-display-l);
 }
 

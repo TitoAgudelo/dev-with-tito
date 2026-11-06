@@ -33,7 +33,7 @@ export default function CapabilityOrbit() {
     <section className="capability-section" aria-labelledby="capability-title">
       <div className="experience-container capability-copy">
         <p className="experience-kicker">02 · Architecture field</p>
-        <h2 id="capability-title">Systems are relationships.</h2>
+        <h2 id="capability-title">Solutions architecture, mapped.</h2>
         <p>Move through the field. The interface responds like the architecture does: every node has context, gravity, and a boundary.</p>
       </div>
       <div ref={stageRef} className="orbit-stage" aria-label="Technology architecture map">

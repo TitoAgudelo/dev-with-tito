@@ -43,7 +43,7 @@ export default function CaseStudyStories({ projects }: { readonly projects: read
     <section ref={rootRef} className="case-studies" aria-labelledby="case-studies-title">
       <header className="experience-container case-studies__header">
         <p className="experience-kicker">03 · Selected systems</p>
-        <h2 id="case-studies-title">Work, unfolded.</h2>
+        <h2 id="case-studies-title">Mobile and web work at Gametime, Fanatics, TaskRabbit.</h2>
         <p>Three product environments. One recurring job: make complexity understandable and failure recoverable.</p>
       </header>
       {projects.map((project, projectIndex) => {
