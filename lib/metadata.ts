@@ -3,6 +3,14 @@ import type { Metadata } from "next";
 import { seo } from "../content/seo";
 import { siteConfig } from "../content/site";
 
+/** A page-level openGraph object drops the file-based image, so subpages name it. */
+const openGraphImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "Tito Agudelo — Senior Software Engineer",
+} as const;
+
 /**
  * Inherited by every route, so nothing page-specific belongs here: a canonical
  * in this object would mark each child route as a duplicate of the homepage.
@@ -70,11 +78,13 @@ export function createPageMetadata({ title, description, path }: PageMetadataInp
       siteName: siteConfig.siteName,
       locale: "en_US",
       type: "website",
+      images: [openGraphImage],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [openGraphImage.url],
     },
   };
 }

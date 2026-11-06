@@ -2376,7 +2376,7 @@ select {
 }
 
 .case-story__identity>span {
-  color: #8b5cf6;
+  color: #c4b5fd;
   font-family: var(--font-family-mono);
   font-size: 0.6875rem;
 }
@@ -2613,7 +2613,7 @@ select {
   align-items: center;
   gap: 0.45rem;
   border-bottom: 1px solid rgb(255 255 255 / 10%);
-  color: #777570;
+  color: #a8a6a0;
   font-size: 0.625rem;
 }
 

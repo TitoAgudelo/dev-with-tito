@@ -7,7 +7,7 @@ import sitemap from "../app/sitemap";
 import { heroCopy } from "../content/hero";
 import { getImpactMetrics, profile, yearsExperience } from "../content/profile";
 import { siteConfig } from "../content/site";
-import { homeMetadata, rootMetadata } from "../lib/metadata";
+import { createPageMetadata, homeMetadata, rootMetadata } from "../lib/metadata";
 import { buildHomeStructuredData } from "../lib/structured-data";
 
 const origin = "https://tito.website";
@@ -174,4 +174,11 @@ test("DESIGN.md records purple as the single accent", async () => {
   const design = await source("../DESIGN.md");
   assert.match(design, /Single accent \| `#7C3AED`/);
   assert.doesNotMatch(design, /C9932E|bronze/i);
+});
+
+test("subpages keep the OG image and do not repeat the name in their title", async () => {
+  const metadata = createPageMetadata({ title: "Example", description: "Example description", path: "/example" });
+  assert.match(JSON.stringify(metadata.openGraph), /"url":"\/opengraph-image"/);
+  assert.match(JSON.stringify(metadata.twitter), /\/opengraph-image/);
+  assert.doesNotMatch(await source("../app/about/page.tsx"), /title: "[^"]*Tito Agudelo/);
 });
