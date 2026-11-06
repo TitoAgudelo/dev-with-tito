@@ -5,7 +5,34 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
+import { scrollToHash } from "../../../lib/hash-navigation";
+
 gsap.registerPlugin(ScrollTrigger);
+
+const HASH_ALIGNMENT_WINDOW_MS = 4000;
+const USER_SCROLL_EVENTS = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+
+// Pinned sections add their scroll length after hydration, so a browser jump to
+// a fragment lands short. Re-align after each refresh until the visitor takes
+// over, one frame later because the layout is still settling during the event.
+function keepHashTargetAligned() {
+  let frame = 0;
+  const align = () => {
+    window.cancelAnimationFrame(frame);
+    frame = window.requestAnimationFrame(() => scrollToHash(window.location.hash, document));
+  };
+  const stop = () => {
+    window.clearTimeout(timeout);
+    window.cancelAnimationFrame(frame);
+    ScrollTrigger.removeEventListener("refresh", align);
+    USER_SCROLL_EVENTS.forEach((type) => window.removeEventListener(type, stop));
+  };
+  const timeout = window.setTimeout(stop, HASH_ALIGNMENT_WINDOW_MS);
+
+  ScrollTrigger.addEventListener("refresh", align);
+  USER_SCROLL_EVENTS.forEach((type) => window.addEventListener(type, stop, { passive: true }));
+  return stop;
+}
 
 interface ExperienceMotionProviderProps {
   readonly children: ReactNode;
@@ -51,8 +78,10 @@ export default function ExperienceMotionProvider({ children }: ExperienceMotionP
       }
     }
 
+    const stopHashAlignment = keepHashTargetAligned();
     ScrollTrigger.refresh();
     return () => {
+      stopHashAlignment();
       removeCursorListeners();
       lenis.off("scroll", updateScroll);
       lenis.destroy();
