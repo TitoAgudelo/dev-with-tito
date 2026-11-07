@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./site-header.css";
 import MainContent from "./components/shell/MainContent";
+import NavStateController from "./components/shell/NavStateController";
 import SiteFooter from "./components/shell/SiteFooter";
 import SiteHeader from "./components/shell/SiteHeader";
 import SkipLink from "./components/shell/SkipLink";
@@ -24,6 +26,7 @@ export default function RootLayout({
     <html lang="en" data-theme="light">
       <body className="font-sans antialiased">
         <SkipLink />
+        <NavStateController />
         <SiteHeader />
         <MainContent>{children}</MainContent>
         <SiteFooter />

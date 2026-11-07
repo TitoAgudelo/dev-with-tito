@@ -29,7 +29,7 @@ export default function PhilosophyReveal() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="philosophy-section" aria-labelledby="philosophy-title">
+    <section ref={sectionRef} className="philosophy-section" data-nav-theme="light" aria-labelledby="philosophy-title">
       <div className="experience-container">
         <p className="experience-kicker">04 · Engineering philosophy</p>
         <h2 id="philosophy-title" className="philosophy-statement">

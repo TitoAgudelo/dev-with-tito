@@ -30,7 +30,7 @@ export default function CapabilityOrbit() {
   }, []);
 
   return (
-    <section className="capability-section" aria-labelledby="capability-title">
+    <section className="capability-section" data-nav-theme="light" aria-labelledby="capability-title">
       <div className="experience-container capability-copy">
         <p className="experience-kicker">02 · Architecture field</p>
         <h2 id="capability-title">Solutions architecture, mapped.</h2>

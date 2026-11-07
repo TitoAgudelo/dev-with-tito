@@ -39,7 +39,7 @@ export default function ImpactMetrics({ metrics }: { readonly metrics: readonly 
   }, []);
 
   return (
-    <section ref={sectionRef} id="impact" className="impact-section" aria-labelledby="impact-title">
+    <section ref={sectionRef} id="impact" className="impact-section" data-nav-theme="dark" aria-labelledby="impact-title">
       <div className="experience-container impact-layout">
         <div className="impact-intro">
           <p className="experience-kicker">01 · Operating range</p>

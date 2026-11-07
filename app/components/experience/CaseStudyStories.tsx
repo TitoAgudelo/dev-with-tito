@@ -40,7 +40,7 @@ export default function CaseStudyStories({ projects }: { readonly projects: read
   }, []);
 
   return (
-    <section ref={rootRef} className="case-studies" aria-labelledby="case-studies-title">
+    <section ref={rootRef} className="case-studies" data-nav-theme="dark" data-nav-section="work" aria-labelledby="case-studies-title">
       <header className="experience-container case-studies__header">
         <p className="experience-kicker">03 · Selected systems</p>
         <h2 id="case-studies-title">Mobile and web work at Gametime, Fanatics, TaskRabbit.</h2>

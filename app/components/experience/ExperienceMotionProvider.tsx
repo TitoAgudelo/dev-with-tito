@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 import { scrollToHash } from "../../../lib/hash-navigation";
+import { registerScroller } from "../../../lib/scroll-lock";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +53,7 @@ export default function ExperienceMotionProvider({ children }: ExperienceMotionP
     });
     const updateScroll = () => ScrollTrigger.update();
     const tick = (time: number) => lenis.raf(time * 1000);
+    const unregisterScroller = registerScroller(lenis);
 
     lenis.on("scroll", updateScroll);
     gsap.ticker.add(tick);
@@ -83,6 +85,7 @@ export default function ExperienceMotionProvider({ children }: ExperienceMotionP
     return () => {
       stopHashAlignment();
       removeCursorListeners();
+      unregisterScroller();
       lenis.off("scroll", updateScroll);
       lenis.destroy();
       gsap.ticker.remove(tick);

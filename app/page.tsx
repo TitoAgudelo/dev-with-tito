@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { featuredProjects } from "../content/projects";
 import { yearsExperience } from "../content/profile";
@@ -16,6 +16,8 @@ import PhilosophyReveal from "./components/experience/PhilosophyReveal";
 import TerminalCTA from "./components/experience/TerminalCTA";
 
 export const metadata: Metadata = homeMetadata;
+
+export const viewport: Viewport = { themeColor: "#090a20" };
 
 const metrics: readonly ExperienceMetric[] = [
   { value: yearsExperience, label: "years in production engineering", note: "Across web, mobile, and AI products" },

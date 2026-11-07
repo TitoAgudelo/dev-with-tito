@@ -1,3 +1,4 @@
+import { heroCopy } from "../../../content/hero";
 import { publishedNavigation } from "../../../content/site";
 import Container from "../foundation/Container";
 import DesktopNav from "./DesktopNav";
@@ -12,15 +13,15 @@ export default function SiteHeader() {
     <header className="site-header">
       <Container className="site-header__inner">
         <SiteLogo />
-        <div className="site-header__desktop">
+        <div className="site-header__actions">
           <DesktopNav items={routeItems} />
           {contactItem ? (
-            <a className="button-link button-link--primary button-link--compact" href={contactItem.href}>
-              {contactItem.label}
+            <a className="button-link button-link--primary button-link--compact site-header__cta" href={contactItem.href}>
+              {heroCopy.primaryCta.label}
             </a>
           ) : null}
+          <MobileNav items={publishedNavigation} />
         </div>
-        <MobileNav items={publishedNavigation} />
       </Container>
     </header>
   );

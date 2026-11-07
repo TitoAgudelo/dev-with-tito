@@ -31,6 +31,7 @@ export default function NavLinks({ items, presentation, onNavigate }: NavLinksPr
             <Link
               href={item.href}
               className="nav-link"
+              data-nav-link={item.id}
               aria-current={current ? "page" : undefined}
               onClick={onNavigate}
             >

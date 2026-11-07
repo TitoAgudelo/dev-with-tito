@@ -2,7 +2,7 @@ import ContactForm from "../ContactForm";
 
 export default function TerminalCTA({ linkedInUrl }: { readonly linkedInUrl: string }) {
   return (
-    <section id="contact" className="terminal-section" aria-labelledby="terminal-title">
+    <section id="contact" className="terminal-section" data-nav-theme="dark" data-nav-section="contact" aria-labelledby="terminal-title">
       <div className="experience-container terminal-layout">
         <div>
           <p className="experience-kicker experience-kicker--light">06 · Start a conversation</p>
