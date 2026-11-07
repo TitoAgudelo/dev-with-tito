@@ -3,7 +3,7 @@ import NavLinks from "./NavLinks";
 
 export default function DesktopNav({ items }: { readonly items: readonly NavigationItem[] }) {
   return (
-    <nav className="desktop-nav" aria-label="Primary navigation">
+    <nav className="desktop-nav" aria-label="Primary">
       <NavLinks items={items} presentation="desktop" />
     </nav>
   );

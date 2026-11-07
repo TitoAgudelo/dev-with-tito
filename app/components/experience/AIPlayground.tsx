@@ -34,7 +34,7 @@ function resetTilt(event: PointerEvent<HTMLElement>) {
 
 export default function AIPlayground() {
   return (
-    <section className="playground-section" aria-labelledby="playground-title">
+    <section className="playground-section" data-nav-theme="light" aria-labelledby="playground-title">
       <div className="experience-container">
         <header className="playground-header">
           <div><p className="experience-kicker">05 · AI playground</p><h2 id="playground-title">AI prototypes with boundaries.</h2></div>

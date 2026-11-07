@@ -7,7 +7,7 @@ import SiteLogo from "./SiteLogo";
 
 export default function SiteFooter() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" data-nav-theme="light">
       <Container>
         <div className="site-footer__primary">
           <SiteLogo />
