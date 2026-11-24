@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./site-header.css";
+import "./ask-launcher.css";
+import "./solutions.css";
+import AskTitoLauncher from "./components/ask-tito/AskTitoLauncher";
 import MainContent from "./components/shell/MainContent";
 import NavStateController from "./components/shell/NavStateController";
 import SiteFooter from "./components/shell/SiteFooter";
@@ -30,6 +33,7 @@ export default function RootLayout({
         <SiteHeader />
         <MainContent>{children}</MainContent>
         <SiteFooter />
+        <AskTitoLauncher />
       </body>
     </html>
   );

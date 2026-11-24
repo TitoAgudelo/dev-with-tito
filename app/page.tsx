@@ -13,6 +13,7 @@ import ExperienceMotionProvider from "./components/experience/ExperienceMotionPr
 import HeroExperience from "./components/experience/HeroExperience";
 import ImpactMetrics, { type ExperienceMetric } from "./components/experience/ImpactMetrics";
 import PhilosophyReveal from "./components/experience/PhilosophyReveal";
+import SolutionsTeaser from "./components/experience/SolutionsTeaser";
 import TerminalCTA from "./components/experience/TerminalCTA";
 
 export const metadata: Metadata = homeMetadata;
@@ -37,6 +38,7 @@ export default function Home() {
         <CaseStudyStories projects={featuredProjects} />
         <PhilosophyReveal />
         <AIPlayground />
+        <SolutionsTeaser />
         <TerminalCTA linkedInUrl={siteConfig.socialProfiles.find((item) => item.id === "linkedin")!.url} />
       </ExperienceMotionProvider>
     </>

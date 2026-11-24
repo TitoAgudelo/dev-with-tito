@@ -2088,8 +2088,8 @@ select {
 
 .impact-item small {
   margin-top: 0.35rem;
-  color: #8b8984;
-  font-size: 0.6875rem;
+  color: #d0cec9; /* ≥ 4.5:1 on #111111 even when the item is dimmed to 0.6 */
+  font-size: 0.75rem;
 }
 
 .capability-section {

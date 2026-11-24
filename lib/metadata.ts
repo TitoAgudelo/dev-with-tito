@@ -62,21 +62,30 @@ interface PageMetadataInput {
   readonly title: string;
   readonly description: string;
   readonly path: string;
+  /** hreflang → path. Include `x-default` to name the fallback. */
+  readonly languages?: Readonly<Record<string, string>>;
+  readonly ogLocale?: "en_US" | "es_CO";
 }
 
-export function createPageMetadata({ title, description, path }: PageMetadataInput): Metadata {
+export function createPageMetadata({
+  title,
+  description,
+  path,
+  languages,
+  ogLocale = "en_US",
+}: PageMetadataInput): Metadata {
   const canonical = new URL(path, siteConfig.canonicalOrigin).toString();
 
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, ...(languages ? { languages: { ...languages } } : {}) },
     openGraph: {
       title,
       description,
       url: canonical,
       siteName: siteConfig.siteName,
-      locale: "en_US",
+      locale: ogLocale,
       type: "website",
       images: [openGraphImage],
     },
