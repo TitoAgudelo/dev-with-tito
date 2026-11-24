@@ -12,6 +12,7 @@ test("every homepage section declares the nav theme of its real background", asy
     ["CaseStudyStories", "dark"],
     ["PhilosophyReveal", "light"],
     ["AIPlayground", "light"],
+    ["SolutionsTeaser", "light"],
     ["TerminalCTA", "dark"],
   ];
   for (const [component, theme] of expected) {

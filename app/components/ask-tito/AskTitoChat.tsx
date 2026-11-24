@@ -1,7 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 
+import { ASK_TITO_COPY } from "../../../content/ask-tito";
+import type { Locale } from "../../../lib/i18n";
 import type { AskTitoMessage, AskTitoSource, AskTitoStreamEvent } from "../../../types/ask-tito";
 import ChatMessage from "./ChatMessage";
 import SuggestedQuestions from "./SuggestedQuestions";
@@ -12,17 +14,40 @@ function createId(): string {
   return crypto.randomUUID();
 }
 
-async function publicError(response: Response): Promise<string> {
+async function publicError(response: Response, fallback: string): Promise<string> {
   try {
     const body = await response.json() as { error?: unknown };
     if (typeof body.error === "string") return body.error;
   } catch {
     // The public fallback below intentionally hides malformed provider responses.
   }
-  return "Ask Tito AI is temporarily unavailable. Please try again.";
+  return fallback;
 }
 
-export default function AskTitoChat() {
+/** `id` makes a repeat of the same question a new request. */
+export interface AskTitoRequest {
+  readonly text: string;
+  readonly id: number;
+}
+
+export interface AskTitoChatProps {
+  readonly locale?: Locale;
+  readonly variant?: "page" | "panel";
+  readonly initialQuestion?: AskTitoRequest;
+  readonly onNavigate?: () => void;
+}
+
+export default function AskTitoChat({
+  locale = "en",
+  variant = "page",
+  initialQuestion,
+  onNavigate,
+}: AskTitoChatProps) {
+  const copy = ASK_TITO_COPY[locale];
+  const fieldId = useId().replaceAll(":", "");
+  const questionId = `ask-tito-question-${fieldId}`;
+  const helpId = `ask-tito-help-${fieldId}`;
+  const errorId = `ask-tito-error-${fieldId}`;
   const [messages, setMessages] = useState<readonly AskTitoMessage[]>([]);
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
@@ -76,8 +101,8 @@ export default function AskTitoChat() {
         body: JSON.stringify({ question: submitted }),
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(await publicError(response));
-      if (!response.body) throw new Error("The AI service returned an empty response.");
+      if (!response.ok) throw new Error(await publicError(response, copy.unavailable));
+      if (!response.body) throw new Error(copy.emptyResponse);
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -107,7 +132,7 @@ export default function AskTitoChat() {
     } catch (cause: unknown) {
       if (controller.signal.aborted) return;
       if (animationFrame !== undefined) window.cancelAnimationFrame(animationFrame);
-      const message = cause instanceof Error ? cause.message : "Ask Tito AI is temporarily unavailable.";
+      const message = cause instanceof Error ? cause.message : copy.unavailable;
       setError(message);
       setMessages((current) => current.map((item) => item.id === assistantId
         ? { ...item, content: item.content || message, status: "error" }
@@ -116,7 +141,17 @@ export default function AskTitoChat() {
       if (abortRef.current === controller) abortRef.current = null;
       setBusy(false);
     }
-  }, [busy]);
+  }, [busy, copy]);
+
+  const askRef = useRef(ask);
+  useEffect(() => { askRef.current = ask; }, [ask]);
+
+  // Deferred so StrictMode's mount/cleanup/mount does not abort the request it starts.
+  useEffect(() => {
+    if (!initialQuestion) return;
+    const timer = window.setTimeout(() => void askRef.current(initialQuestion.text), 0);
+    return () => window.clearTimeout(timer);
+  }, [initialQuestion]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,38 +166,38 @@ export default function AskTitoChat() {
   }
 
   return (
-    <section className="ask-console" aria-label="Ask Tito AI conversation">
-      {messages.length === 0 ? <SuggestedQuestions onSelect={(value) => void ask(value)} disabled={busy} /> : null}
+    <section className={`ask-console ask-console--${variant}`} aria-label={copy.conversationLabel}>
+      {messages.length === 0 ? <SuggestedQuestions locale={locale} onSelect={(value) => void ask(value)} disabled={busy} /> : null}
       {messages.length > 0 ? (
         <div className="ask-transcript" role="log" aria-live="polite" aria-relevant="additions text">
-          {messages.map((message) => <ChatMessage key={message.id} message={message} />)}
+          {messages.map((message) => <ChatMessage key={message.id} message={message} locale={locale} onNavigate={onNavigate} />)}
           <div ref={latestRef} aria-hidden="true" />
         </div>
       ) : null}
 
       <form className="ask-composer" onSubmit={handleSubmit} aria-busy={busy}>
-        <label htmlFor="ask-tito-question">Ask a question about Tito</label>
+        <label htmlFor={questionId}>{copy.fieldLabel}</label>
         <div className="ask-composer__field">
           <span aria-hidden="true">›</span>
           <textarea
-            id="ask-tito-question"
+            id={questionId}
             value={question}
             onChange={(event) => setQuestion(event.target.value.slice(0, MAX_LENGTH))}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about architecture, leadership, projects…"
+            placeholder={copy.placeholder}
             rows={2}
             maxLength={MAX_LENGTH}
             disabled={busy}
-            aria-describedby="ask-tito-help ask-tito-error"
+            aria-describedby={`${helpId} ${errorId}`}
           />
           <button type="submit" disabled={busy || !question.trim()}>
-            <span>{busy ? "Thinking" : "Ask Tito"}</span><i aria-hidden="true">↵</i>
+            <span>{busy ? copy.thinking : copy.send}</span><i aria-hidden="true">↵</i>
           </button>
         </div>
-        <div className="ask-composer__help" id="ask-tito-help">
-          <span>Enter to send · Shift + Enter for a new line</span><span>{question.length}/{MAX_LENGTH}</span>
+        <div className="ask-composer__help" id={helpId}>
+          <span>{copy.keyboardHelp}</span><span>{question.length}/{MAX_LENGTH}</span>
         </div>
-        <p id="ask-tito-error" className="ask-error" role={error ? "alert" : undefined}>{error}</p>
+        <p id={errorId} className="ask-error" role={error ? "alert" : undefined}>{error}</p>
       </form>
     </section>
   );

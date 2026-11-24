@@ -1,0 +1,24 @@
+import type { Metadata } from "next";
+
+import { SOLUTIONS_COPY } from "../../../content/solutions";
+import { SOLUTIONS_PATHS } from "../../../lib/i18n";
+import { createPageMetadata } from "../../../lib/metadata";
+import SolutionsPage from "../../components/solutions/SolutionsPage";
+
+const { meta } = SOLUTIONS_COPY.es;
+
+export const metadata: Metadata = createPageMetadata({
+  title: meta.title,
+  description: meta.description,
+  path: SOLUTIONS_PATHS.es,
+  ogLocale: "es_CO",
+  languages: {
+    en: SOLUTIONS_PATHS.en,
+    es: SOLUTIONS_PATHS.es,
+    "x-default": SOLUTIONS_PATHS.en,
+  },
+});
+
+export default function SolucionesRoute() {
+  return <SolutionsPage locale="es" />;
+}

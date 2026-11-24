@@ -52,7 +52,7 @@ test("hero Cloud Field is isolated, progressive, and motion preference aware", a
   assert.doesNotMatch(stylesheet, /\.experience-grid\s*\{/);
   assert.doesNotMatch(stylesheet, /\.experience-hero::after/);
   assert.match(stylesheet, /\.hero-background__fallback/);
-  assert.match(stylesheet, /data-ready="true"\] \.hero-background__fallback \{ opacity: 0; \}/);
+  assert.match(stylesheet, /\.hero-background\[data-ready="true"\] \.hero-background__fallback\s*\{\s*opacity:\s*0;\s*\}/);
   assert.match(stylesheet, /pointer-events: none/);
 });
 
